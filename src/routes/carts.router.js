@@ -1,9 +1,9 @@
 import { Router } from "express";
-import CartsManager from '../CartManager.js'
+import CartsManager from '../managers/CartManager.js'
 
 const router = Router()
 
-const carts = new CartsManager('src/dataCarts.json')
+const carts = new CartsManager('src/managers/dataCarts.json')
 
 router.post('/', (req, res)=>{
     carts.addCart().then(response=>{
@@ -22,7 +22,14 @@ router.get('/:cid', (req, res)=>{
 })
 
 router.post('/:cid/product/:pid', (req, res)=>{
-    
+
+    let {cid, pid} = req.params;
+    let product = req.body;
+
+    carts.addProductToCart(parseInt(cid), parseInt(pid), product).then(response=>{
+        res.send(response)
+    })
+    .catch((error)=> console.log(error))
 })
 
 

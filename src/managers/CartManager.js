@@ -60,26 +60,27 @@ export default class CartsManager {
         }
     }
 
-    addProductToCart = async(cartId, dataProduct) =>{
+    addProductToCart = async(cartId, productId, dataProduct) =>{
         try{
             const cartsParse = await this.getCarts()
 
             //reveer como hacerlo
-            cartsParse.map((cart)=>{
+            const addProducts = cartsParse.map((cart)=>{
                 if(cart.id === cartId){
+                    console.log('cart.products', cart.products)
                     if(cart.products.length === 0){
                         return{
                             ...cart,
-                            products: [{product: dataProduct.id, quantity: dataProduct.stock}]
+                            products: [{product: productId, quantity: dataProduct.stock}]
                         }
                     }else{
-                        const productSearch = cart.products.find(product => product === dataProduct.id);
+                        const productSearch = cart.products.find(prod => prod.product === productId);
 
                         if(productSearch){
                             return{
                                 ...cart,
                                 products: cart.products.map((prod)=>{
-                                    if(prod.product === dataProduct.id){
+                                    if(prod.product === productId){
                                         return{
                                             ...prod,
                                             quantity: prod.quantity + dataProduct.stock
@@ -101,20 +102,10 @@ export default class CartsManager {
                 return cart
             })
 
-            // const cartSearch = cartsParse.find(cart => cart.id === cartId)
+            let productsJson = JSON.stringify(addProducts, null, 2)
+            await fs.promises.writeFile(this.path, productsJson, 'utf-8')
 
-            // if(cartSearch){
-            //     const productSearch = cartSearch.products.find(product=> product.product === productId)
-
-            //     if(!productSearch){
-
-            //     }
-            // }
-
-            // let productsJson = JSON.stringify(updateProduct, null, 2)
-            // await fs.promises.writeFile(this.path, productsJson, 'utf-8')
-
-            // return 'Producto editado exitosamente'
+            return 'Producto Agregado exitosamente'
     
         }
         catch (error) {
