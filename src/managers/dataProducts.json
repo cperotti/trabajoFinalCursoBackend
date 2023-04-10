@@ -108,5 +108,16 @@
     "id": 10,
     "category": "almacen",
     "status": true
+  },
+  {
+    "title": "Pechuga de pollo",
+    "description": "Pechuga de pollo sin piel",
+    "price": 1889,
+    "code": "011",
+    "thumbnail": [],
+    "stock": 20,
+    "category": "carnes",
+    "id": 11,
+    "status": true
   }
 ]

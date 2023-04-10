@@ -67,7 +67,6 @@ export default class CartsManager {
             //reveer como hacerlo
             const addProducts = cartsParse.map((cart)=>{
                 if(cart.id === cartId){
-                    console.log('cart.products', cart.products)
                     if(cart.products.length === 0){
                         return{
                             ...cart,
