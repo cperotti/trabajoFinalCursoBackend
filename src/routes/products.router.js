@@ -1,9 +1,11 @@
 import { Router } from "express";
 //import ProductManager from "../dao/fileSystem/ProductManager.js";
 //import { uploader } from "../utils.js";
-import { productModel } from "../dao/models/product.model.js";
+import ProductManagerMongo from "../dao/mongo/product.mongo.js";
 
 //const products = new ProductManager('src/dao/fileSystem/dataProducts.json');
+
+const productsMongo = new ProductManagerMongo()
 
 const router = Router();
 
@@ -18,7 +20,7 @@ const router = Router();
 
 router.get('/', async(req, res)=>{
     try{
-        let products = await productModel.find();
+        const products = await productsMongo.getProducts()
         res.send({
             status: 'success',
             payload: products
@@ -28,14 +30,18 @@ router.get('/', async(req, res)=>{
     }
 })
 
-router.get('/:pid', (req,res)=>{
-
-    let {pid} = req.params
-    
-    products.getProductById(parseInt(pid)).then((response)=>{
-        res.send(response)
-    })
-    .catch((error)=>console.log(error))
+router.get('/:pid', async(req,res)=>{
+    try{
+        let {pid} = req.params
+        
+        let response = await productsMongo.getProductById(pid)
+        res.send({
+            status:'success',
+            payload: response,
+        })
+    }catch(error){
+        console.log(error)
+    }
 })
 
 //descomentar para ver error que me tira cuando pruebo cargarlo desde postman como form-data
@@ -53,14 +59,20 @@ router.get('/:pid', (req,res)=>{
 //     .catch((error)=>console.log(error))
 // })
 
-router.post('/', (req, res)=>{
+router.post('/', async(req, res)=>{
+    try{
+        const newProduct = req.body;
 
-    let product = req.body;
+        let response = await productsMongo.addProduct(newProduct)
+            
+        res.send({
+            status:'Success',
+            payload: response,
+        })
 
-    products.addProduct(product).then((response)=>{
-        res.send(response)
-    })
-    .catch((error)=>console.log(error))
+    }catch(error){
+        console.log(error)
+    }
 })
 
 router.put('/:pid', (req, res)=>{
