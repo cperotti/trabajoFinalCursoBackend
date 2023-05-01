@@ -1,9 +1,9 @@
 import { Router } from "express";
-import CartsManager from '../managers/CartManager.js'
+//import CartsManager from '../dao/fileSystem/CartManager.js';
 
 const router = Router()
 
-const carts = new CartsManager('src/managers/dataCarts.json')
+/*const carts = new CartsManager('src/dao/fileSystem/dataCarts.json')
 
 router.post('/', (req, res)=>{
     carts.addCart().then(response=>{
@@ -30,7 +30,7 @@ router.post('/:cid/product/:pid', (req, res)=>{
         res.send(response)
     })
     .catch((error)=> console.log(error))
-})
+})*/
 
 
 export default router;

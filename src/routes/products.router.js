@@ -1,18 +1,31 @@
 import { Router } from "express";
-import ProductManager from "../managers/ProductManager.js";
-import { uploader } from "../utils.js";
+//import ProductManager from "../dao/fileSystem/ProductManager.js";
+//import { uploader } from "../utils.js";
+import { productModel } from "../dao/models/product.model.js";
 
-const products = new ProductManager('src/managers/dataProducts.json');
+//const products = new ProductManager('src/dao/fileSystem/dataProducts.json');
 
 const router = Router();
 
-router.get('/', (req, res)=>{
+/*router.get('/', (req, res)=>{
     products.getProducts().then((response)=>{
         let {limit} = req.query
         if(limit) return res.send({products: response.slice(0, limit)})
         res.send({products: response})
     })
     .catch((error)=>console.log(error))
+})*/
+
+router.get('/', async(req, res)=>{
+    try{
+        let products = await productModel.find();
+        res.send({
+            status: 'success',
+            payload: products
+        })
+    }catch(error){
+        console.log(error)
+    }
 })
 
 router.get('/:pid', (req,res)=>{

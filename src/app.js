@@ -1,10 +1,13 @@
 import express from 'express';
 import productsRouter from './routes/products.router.js';
 import cartsRouter from './routes/carts.router.js';
+import {configConnect} from './config/config.js';
 
 const {pathname: root} = new URL('../src', import.meta.url)
 
 const app = express();
+
+configConnect.connectDB()
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
