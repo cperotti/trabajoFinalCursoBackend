@@ -1,22 +1,10 @@
 import { Router } from "express";
-//import ProductManager from "../dao/fileSystem/ProductManager.js";
 //import { uploader } from "../utils.js";
 import ProductManagerMongo from "../dao/mongo/product.mongo.js";
-
-//const products = new ProductManager('src/dao/fileSystem/dataProducts.json');
 
 const productsMongo = new ProductManagerMongo()
 
 const router = Router();
-
-/*router.get('/', (req, res)=>{
-    products.getProducts().then((response)=>{
-        let {limit} = req.query
-        if(limit) return res.send({products: response.slice(0, limit)})
-        res.send({products: response})
-    })
-    .catch((error)=>console.log(error))
-})*/
 
 router.get('/', async(req, res)=>{
     try{
@@ -75,25 +63,33 @@ router.post('/', async(req, res)=>{
     }
 })
 
-router.put('/:pid', (req, res)=>{
-
-    let product = req.body
-    let {pid} = req.params
-
-    products.updateProduct(parseInt(pid),product).then((response)=>{
-        res.send(response)
-    })
-    .catch((error)=>console.log(error))
+router.put('/:pid', async(req, res)=>{
+    try{
+        let productReplace = req.body
+        let {pid} = req.params
+    
+        let response = await productsMongo.updateProduct(pid,productReplace)
+        res.send({
+            status: 'success',
+            payload: response,
+        })
+    }catch (error){
+        console.log(error)
+    }
 })
 
-router.delete('/:pid', (req, res)=>{
-
-    let {pid} = req.params
-
-    products.deleteProduct(parseInt(pid)).then((response)=>{
-        res.send(response)
-    })
-    .catch((error)=>console.log(error))
+router.delete('/:pid', async(req, res)=>{
+    try {
+        let {pid} = req.params
+    
+        let response = await productsMongo.deleteProduct(pid)
+        res.send({
+            status:'success',
+            payload: response,
+        })
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 export default router;

@@ -1,5 +1,5 @@
 import {connect} from "mongoose";
-let url = 'mongodb+srv://cperotti:cpm.db@cluster0.gqgbmdf.mongodb.net/?retryWrites=true&w=majority'
+let url = 'mongodb+srv://cperotti:cpm.db@cluster0.gqgbmdf.mongodb.net/ecommerce?retryWrites=true&w=majority'
 
 export const configServer = {
     connectDB:()=>{

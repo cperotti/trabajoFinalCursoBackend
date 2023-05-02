@@ -22,11 +22,20 @@ class ProductManagerMongo {
             return new Error(error)
         }
     }
-    updateProduct = async()=>{
+    updateProduct = async(pid, dataReplace)=>{
+        try {
+            return await productModel.updateOne({_id: pid}, dataReplace)
+        } catch (error) {
+            return new Error(error)
+        }
         
     }
-    deleteProduct = async()=>{
-        
+    deleteProduct = async(pid)=>{
+        try {
+            return await productModel.deleteOne({_id: pid})
+        } catch (error) {
+            return new Error(error)
+        }
     }
 }
 
