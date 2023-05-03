@@ -22,9 +22,19 @@ class CartManagerMongo {
             return new Error(error)
         }
     }
-    addProductToCart = async(cid, pid, newProduct)=>{
+    addProductToCart = async(cid, pid, dataProduct)=>{
         try {
-            return await cartModel.find({_id: cid}).updateOne({products: {_id: pid}}, {product: pid, quantity: newProduct.stock})
+            const findCart = await cartModel.find({_id: cid})
+            const hasProduct = findCart[0].products.find(el => el.product === pid)
+            if(findCart.length > 0){
+                if(hasProduct){
+                    return await cartModel.updateOne({_id: cid, "products.product": pid}, {$inc: {"products.$.quantity": dataProduct.stock}})
+                }else{
+                    return await cartModel.updateOne({_id: cid}, {$push:{products:{product: pid, quantity: dataProduct.stock}}})
+                }
+            }else{
+                return 'No hay carritos creados'
+            }
         } catch (error) {
             return new Error(error)
         }
