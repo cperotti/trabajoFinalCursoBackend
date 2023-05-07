@@ -1,4 +1,4 @@
-import { messageModel } from "../models/message.model"
+import { messageModel } from "../models/message.model.js"
 
 class MessageManagerMongo {
     addMessage = async(newMessage)=>{
@@ -10,7 +10,7 @@ class MessageManagerMongo {
     }
     getMessages = async()=>{
         try {
-            return await messageModel.find()
+            return await messageModel.find().lean()
         } catch (error) {
             return new Error(error)
         }
