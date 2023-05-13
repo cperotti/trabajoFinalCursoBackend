@@ -8,7 +8,8 @@ const router = Router();
 
 router.get('/', async(req, res)=>{
     try{
-        const products = await productsMongo.getProducts()
+        let {limit, page, sort, query} = req.query
+        const products = await productsMongo.getProducts(limit, sort)
         res.send({
             status: 'success',
             payload: products

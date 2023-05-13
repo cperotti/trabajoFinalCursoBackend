@@ -1,9 +1,9 @@
 import { productModel } from "../models/product.model.js";
 
 class ProductManagerMongo {
-    getProducts = async()=>{
+    getProducts = async(limit=10, sort)=>{
         try{
-            return await productModel.find({})
+            return await productModel.find({}).sort(sort ? {price: sort}:{}).limit(limit)
         }catch(error){
             return new Error(error)
         }
