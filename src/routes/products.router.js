@@ -8,11 +8,19 @@ const router = Router();
 
 router.get('/', async(req, res)=>{
     try{
-        let {limit, page, sort, query} = req.query
-        const products = await productsMongo.getProducts(limit, sort)
-        res.send({
+        let {limit, sort, status, category, query,page} = req.query
+        const products = await productsMongo.getProducts(limit, sort,status, category, query, page)
+        const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = products
+        res.render('products',{
             status: 'success',
-            payload: products
+            payload: docs,
+            hasPrevPage,
+            hasNextPage,
+            prevPage,
+            nextPage,
+            totalPages,
+            prevLink: hasPrevPage ? `/api/products?page=${prevPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`:null,
+            nextLink: hasNextPage ? `/api/products?page=${nextPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`: null
         })
     }catch(error){
         console.log(error)

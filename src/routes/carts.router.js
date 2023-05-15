@@ -47,5 +47,64 @@ router.post('/:cid/product/:pid', async(req, res)=>{
     }
 })
 
+router.delete('/:cid/product/:pid', async(req, res)=>{
+    try {
+        let {cid, pid} = req.params;
+    
+        let response = await cartMongo.deleteProductToCart(cid, pid)
+        res.send({
+            status: 'success',
+            payload: response,
+        })
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.put('/:cid', async(req, res)=>{
+    try {
+        let {cid} = req.params;
+        let dataCart = req.body
+
+        let response = await cartMongo.updateCart(cid, dataCart)
+        res.send({
+            status: 'success',
+            payload:response
+        })
+    } catch (error) {
+        console.log(error)
+    }
+    
+})
+
+router.put('/:cid/product/:pid', async(req, res)=>{
+    try {
+        let {cid, pid} = req.params;
+        let dataProduct = req.body
+    
+        let response = await cartMongo.updateCartProduct(cid, pid, dataProduct)
+        res.send({
+            status: 'success',
+            payload: response,
+        })
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.delete('/:cid', async(req, res)=>{
+    try {
+        let {cid} = req.params;
+        let response = await cartMongo.deleteAllProducts(cid)
+        res.send({
+            status: 'success',
+            payload:response
+        })
+    } catch (error) {
+        console.log(error)
+    }
+    
+})
+
 
 export default router;
