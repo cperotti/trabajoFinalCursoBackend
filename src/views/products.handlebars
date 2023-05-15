@@ -1,18 +1,29 @@
 <div>
-    {{#each payload}}
-        <li>
-            <strong>Producto: </strong>{{this.title}} - 
-            <strong>Descripcion:  </strong>{{this.description}}
-        </li>
-    {{/each}}
-
-    <center>
-        {{#if hasPrevPage}}
-            <a href={{prevLink}}><button>anterior</button></a>
-        {{/if}}
-
-        {{#if hasNextPage}}
-            <a href={{nextLink}}><button>Siguiente</button></a>
-        {{/if}}
-    </center>
+    <div class="p-2">
+        <h2 class="text-center">Listado de productos</h2>
+        <div class="row justify-content-center row-cols-6 m-3">
+            {{#each payload}}
+                    <div class="col card m-1" >
+                        <div class="card-body">
+                            <h5 class="card-title">{{this.title}}</h5>
+                            <p class="card-text">{{this.description}}</p>
+                            <h5>${{this.price}}</h5>
+                            <div class="d-flex justify-content-end">
+                                <Button type="button" class="btn btn-primary btn-sm">Agregar al carrito</Button>
+                            </div>
+                        </div>
+                    </div>
+            {{/each}}
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {{#if hasPrevPage}}
+                    <li class="page-item"><a class="page-link" href={{prevLink}}>Anterior</a></li>
+                {{/if}}
+                {{#if hasNextPage}}
+                    <li class="page-item"><a class="page-link" href={{nextLink}}>Siguiente</a></li>
+                {{/if}}
+            </ul>
+        </nav>
+    </div>
 </div>

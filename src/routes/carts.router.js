@@ -22,10 +22,12 @@ router.get('/:cid', async(req, res)=>{
     try {
         let {cid} = req.params;
         let response = await cartMongo.getCartById(cid)
-        res.send({
+
+       res.render('cartId',{cart:response, hasCart: response})
+        /*res.send({
             status: 'success',
             payload:response
-        })
+        })*/
     } catch (error) {
         console.log(error)
     }

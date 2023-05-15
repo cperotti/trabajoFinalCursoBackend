@@ -17,7 +17,7 @@ class CartManagerMongo {
     }
     getCartById = async(cid)=>{
         try {
-            return await cartModel.findOne({_id:cid})
+            return await cartModel.findOne({_id:cid}).lean()
         } catch (error) {
             return new Error(error)
         }
