@@ -1,27 +1,22 @@
 import { Router } from "express";
 //import { uploader } from "../utils.js";
 import ProductManagerMongo from "../dao/mongo/product.mongo.js";
+import { auth } from "../middlewares/autentication.moddleware.js";
 
 const productsMongo = new ProductManagerMongo()
 
 const router = Router();
 
-router.get('/', async(req, res)=>{
+router.get('/', auth,async(req, res)=>{
     try{
         let {limit, sort, status, category, query,page} = req.query
         const products = await productsMongo.getProducts(limit, sort,status, category, query, page)
-        const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = products
-        res.render('products',{
+
+        res.send({
             status: 'success',
-            payload: docs,
-            hasPrevPage,
-            hasNextPage,
-            prevPage,
-            nextPage,
-            totalPages,
-            prevLink: hasPrevPage ? `/api/products?page=${prevPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`:null,
-            nextLink: hasNextPage ? `/api/products?page=${nextPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`: null
+            payload:products
         })
+
     }catch(error){
         console.log(error)
     }

@@ -1,0 +1,53 @@
+<div class="d-flex flex-column justify-content-center align-items-center ">
+  <div class="card w-50">
+    <div class="card-header">
+      Registrate
+    </div>
+    <div class="card-body">
+      <form action="/api/session/register" method="post" onsubmit="onSubmit">
+        <div class="mb-3 d-flex flex-row ">
+            <div class="w-50 me-1">
+                <label for="first_name" class="form-label">Nombre</label>
+                <input type="text" class="form-control" name="first_name" id="first_name">
+            </div>
+            <div class="w-50">
+                <label for="last_name" class="form-label">Apellido</label>
+                <input type="text" class="form-control" name="last_name" id="last_name">
+            </div>
+        </div>
+          <div class="mb-3">
+              <label for="date_of_birth" class="form-label">Fecha de nacimiento</label>
+              <input type="date" class="form-control" name="date_of_birth" id="date_of_birth">
+          </div>
+          <div class="mb-3 d-flex flex-row">
+            <div class="w-50 me-1">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email">
+            </div>
+            <div class="w-50">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="password">
+            </div>
+          </div>
+          <div class="mb-3">
+        <label for="role" class="form-label">Tipo de usuario</label>
+        <select id="role" class="form-select">
+            <option selected>Elige una opción</option>
+            <option value="admin">Administrador</option>
+            <option value="user">Usuario</option>
+        </select>
+        </div>
+    <div class="d-flex justify-content-between">
+        <a class="btn btn-link" href='/views/login'>Volver al login</a>
+        <button type="submit" class="btn btn-primary">Registrar</button>
+    </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+   function onSubmit(e){
+      e.preventDefault()
+      return false;
+   }
+</script>
