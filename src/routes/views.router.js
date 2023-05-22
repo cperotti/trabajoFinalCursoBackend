@@ -2,6 +2,7 @@ import {Router} from 'express';
 import MessageManagerMongo from '../dao/mongo/message.mongo.js';
 import ProductManagerMongo from "../dao/mongo/product.mongo.js";
 import CartManagerMongo from '../dao/mongo/cart.mongo.js';
+import { auth } from "../middlewares/autentication.moddleware.js";
 
 const productsMongo = new ProductManagerMongo()
 
@@ -44,22 +45,23 @@ router.post('/messages', async(req, res)=>{
     }
 })
 
-router.get('/products', async(req,res)=>{
+router.get('/products', auth,async(req,res)=>{
     try {
         let {limit, sort, status, category, query,page} = req.query
         const products = await productsMongo.getProducts(limit, sort,status, category, query, page)
-        const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = products
+        const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = products;
 
         res.render('products',{
             status: 'success',
+            userData:req.session.user,
             payload: docs,
             hasPrevPage,
             hasNextPage,
             prevPage,
             nextPage,
             totalPages,
-            prevLink: hasPrevPage ? `/api/products?page=${prevPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`:null,
-            nextLink: hasNextPage ? `/api/products?page=${nextPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`: null
+            prevLink: hasPrevPage ? `/views/products?page=${prevPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`:null,
+            nextLink: hasNextPage ? `/views/products?page=${nextPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`: null
         })
         
     } catch (error) {
@@ -67,7 +69,7 @@ router.get('/products', async(req,res)=>{
     }
 })
 
-router.get('/carts/:cid', async(req, res)=>{
+router.get('/carts/:cid', auth, async(req, res)=>{
     try {
         let {cid} = req.params;
         let response = await cartMongo.getCartById(cid)

@@ -5,26 +5,9 @@ const userMongo = new UserManagerMongo();
 
 const router = Router();
 
-// sesiones 
-// router.get('/session', (req, res)=> {
-//     if (req.session.counter) {
-//         req.session.counter ++
-//         res.send(`se ha visitado el sitio ${req.session.counter} veces.`)
-//     } else {
-//         req.session.counter = 1
-//         res.send('Bienvenido')
-//     }
-// })
-
-// router.get('/privada', auth,(req,res) => {
-
-//     res.send('Todo lo que esta acá solo lo puede ver un admin loagueado')
-// })
 router.post('/login', async(req, res)=> {
     try {
         const {email,password} = req.body
-
-        console.log(email,password)
     
         const userValidated = await userMongo.validateUser(email, password)
 
@@ -35,14 +18,13 @@ router.post('/login', async(req, res)=> {
             })
         }
 
-        console.log(userValidated, req.session)
-
         req.session.user = {
             first_name: userValidated.first_name,
             last_name: userValidated.last_name,
             email: userValidated.email,
-            role: userValidated.role,
+            role: userValidated.email === 'adminCoder@coder.com'? "admin":'user',
         }
+        res.redirect('/views/products')
 
         res.send({
             status: 'success',
@@ -61,8 +43,6 @@ router.post('/register', async(req,res)=>{
 
         const alreadyExist = await userMongo.existUserRegister(newUser.email)
 
-        console.log(alreadyExist)
-
         if(alreadyExist){
             res.send({
                 status: 'error',
@@ -71,6 +51,8 @@ router.post('/register', async(req,res)=>{
         }else{
 
             await userMongo.addUser(newUser)
+
+            res.redirect('/views/login')
 
             res.send({
                 status: 'success',
@@ -89,7 +71,7 @@ router.get('/logout', (req, res)=>{
         if (err) {
             return res.send({status: 'error', error: err})
         }
-        res.send('logout ok')
+        res.redirect("/views/login")
     })
 })
 

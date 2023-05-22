@@ -1,7 +1,17 @@
 <div>
     <div class="p-2">
-        <h2 class="text-center">Listado de productos</h2>
-        <div class="row justify-content-center row-cols-6 m-3">
+        <div class="d-flex justify-content-end">
+            <form action="/api/session/logout" method="get">
+                <button type="submit" class="btn btn-primary" >Cerrar sesión</button>
+            </form>
+        </div>
+        <div class="mb-5">
+            <h3 class="text-center">¡Bienvenid@ {{userData.first_name}} {{userData.last_name}}!</h1>
+            <p class="text-center"><strong>Email:</strong>{{userData.email}}</p>
+            <p class="text-center"><strong>Rol:</strong>{{userData.role}}</p>
+        </div>
+        <h4 class="text-center">Listado de productos</h2>
+        <div class="row justify-content-center row-cols-5 m-3">
             {{#each payload}}
                     <div class="col card m-1" >
                         <div class="card-body">
