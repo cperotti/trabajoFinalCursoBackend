@@ -1,12 +1,14 @@
 import express from 'express';
 import {configServer} from './configServer/configServer.js';
 import routerServer from './routes/index.js';
-import __dirname from './dirname.js';
+import __dirname from "./utils.js";
 import handlebars from 'express-handlebars';
 import cookieParser from 'cookie-parser';
 import FileStore from 'session-file-store'
 import session from 'express-session';
 import pkg from 'connect-mongo';
+import { initPassport } from './configServer/passport.config.js';
+import passport from 'passport';
 
 const {create} = pkg;
 
@@ -26,17 +28,21 @@ const fileStore = FileStore(session);
 app.use(session({
     store: create({
         mongoUrl:'mongodb+srv://cperotti:cpm.db@cluster0.gqgbmdf.mongodb.net/ecommerce?retryWrites=true&w=majority',
-        collectionName:'sessions',
         mongoOptions:{
             useNewUrlParser: true,
             useUnifiedTopology: true,
         },
-        ttl:1000000*60,
+        ttl:1000000*6000,
     }),
     secret: 'secretCoder',
     resave:false,
     saveUninitialized: false
 }))
+
+initPassport()
+passport.use(passport.initialize())
+passport.use(passport.session())
+
 
 app.engine('handlebars', handlebars.engine())
 app.set('views', `${__dirname}/views`)

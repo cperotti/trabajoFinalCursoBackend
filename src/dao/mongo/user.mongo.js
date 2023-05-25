@@ -10,9 +10,9 @@ class UserManagerMongo {
         }
     }
 
-    validateUser = async(email, password)=>{
+    validateUser = async(data)=>{
         try {
-            return await userModel.findOne({email, password}); 
+            return await userModel.findOne(data); 
         } catch (error) {
             return new Error(error)
         }

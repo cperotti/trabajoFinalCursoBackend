@@ -2,6 +2,7 @@ import {Router} from 'express';
 import MessageManagerMongo from '../dao/mongo/message.mongo.js';
 import ProductManagerMongo from "../dao/mongo/product.mongo.js";
 import CartManagerMongo from '../dao/mongo/cart.mongo.js';
+import UserManagerMongo from '../dao/mongo/user.mongo.js';
 import { auth } from "../middlewares/autentication.moddleware.js";
 
 const productsMongo = new ProductManagerMongo()
@@ -9,6 +10,8 @@ const productsMongo = new ProductManagerMongo()
 const cartMongo = new CartManagerMongo();
 
 const messageMongo = new MessageManagerMongo();
+
+const userMongo = new UserManagerMongo();
 
 const router = Router();
 
@@ -51,9 +54,10 @@ router.get('/products', auth,async(req,res)=>{
         const products = await productsMongo.getProducts(limit, sort,status, category, query, page)
         const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = products;
 
+        const userData = await userMongo.validateUser({_id: req.session.passport.user})
+
         res.render('products',{
             status: 'success',
-            userData:req.session.user,
             payload: docs,
             hasPrevPage,
             hasNextPage,
@@ -61,7 +65,10 @@ router.get('/products', auth,async(req,res)=>{
             nextPage,
             totalPages,
             prevLink: hasPrevPage ? `/views/products?page=${prevPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`:null,
-            nextLink: hasNextPage ? `/views/products?page=${nextPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`: null
+            nextLink: hasNextPage ? `/views/products?page=${nextPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`: null,
+            first_name: userData.first_name,
+            last_name: userData.last_name,
+            email: userData.email,
         })
         
     } catch (error) {
