@@ -54,12 +54,10 @@ router.get('/products', auth,async(req,res)=>{
         const products = await productsMongo.getProducts(limit, sort,status, category, query, page)
         const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = products;
 
-        //const userData = await userMongo.validateUser({_id: req.session.passport.user})
-
         res.render('products',{
             status: 'success',
             payload: docs,
-            userData:req.session.passport.user,
+            userData:req.session?.passport?.user,
             hasPrevPage,
             hasNextPage,
             prevPage,

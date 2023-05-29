@@ -7,13 +7,13 @@ router.post('/login', passport.authenticate('login', {failureRedirect:'/api/sess
     try {
         if (!req.user) return res.status(401).send({status: 'error', message: 'Datos incorrectos'})
 
-        req.session.passport.user = {
-            id:req.session.passport.user,
-            first_name: req.user.first_name,
-            last_name: req.user.last_name,
-            email: req.user.email,
-            role: req.user.email === 'adminCoder@coder.com'? "admin":'user',
-        }
+            req.session.passport.user = {
+                _id:req.session.passport.user,
+                first_name: req.user.first_name,
+                last_name: req.user.last_name,
+                email: req.user.email,
+                role: req.user.email === 'adminCoder@coder.com'? "admin":'user',
+            }
 
         res.redirect('/views/products')
         
@@ -103,7 +103,13 @@ router.get('/failregister', async (req,res)=>{
 router.get('/github', passport.authenticate('github', {scope: ['user:email']}),()=>{})
 
 router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/views/login'}),(req,res)=> {
-    req.session.user = req.user
+    req.session.passport.user = {
+        _id:req.session.passport.user,
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        email: req.user.email,
+        role: req.user.email === 'adminCoder@coder.com'? "admin":'user',
+    }
     res.redirect('/views/products')
 })
 

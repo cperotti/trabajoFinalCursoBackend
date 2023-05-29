@@ -72,7 +72,7 @@ export const initPassportGitHub = () => {
                 let newUser = {
                     first_name: profile._json.name,
                     last_name: profile._json.name,
-                    email: 'carolinaperotti16@gmail.com', //profile._json.email,
+                    email: profile._json.email,
                     date_of_birth:'',
                     password:''
                 }
