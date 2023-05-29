@@ -2,6 +2,7 @@ import passport from 'passport'
 import local from 'passport-local'
 import UserManagerMongo from '../dao/mongo/user.mongo.js'
 import { createHash, isValidPassword } from '../utils.js';
+import GithubStrategy from 'passport-github2'
 
 const userMongo  =  new UserManagerMongo();
 
@@ -12,13 +13,13 @@ export const initPassport = () => {
         passReqToCallback: true,
         usernameField: 'email'
     }, async (req, username, password, done)=>{
-        const {firts_name, last_name} = req.body
+        const {first_name, last_name} = req.body
         try {
             let user = await userMongo.validateUser({email: username})
             if (user) return done(null, false)
 
             let newUser = {
-                firts_name,
+                first_name,
                 last_name,
                 email: username,
                 password: createHash(password)
@@ -56,4 +57,43 @@ export const initPassport = () => {
             return done(error)
         }
     }))
+}
+
+export const initPassportGitHub = () => {
+    passport.use('github', new GithubStrategy({
+        clientID:'Iv1.fa670e9d18217e2f',
+        clientSecret:'c4a5a9d7a1f87ee37e5b4c8ac6a894fbea77946e',
+        callbackURL:'http://localhost:8080/api/session/githubcallback'
+    }, async(accessToken, refreshToken, profile, done)=>{
+        try {
+            let user = await userMongo.validateUser({email: profile._json.email})
+
+            if(!user){
+                let newUser = {
+                    first_name: profile._json.name,
+                    last_name: profile._json.name,
+                    email: 'carolinaperotti16@gmail.com', //profile._json.email,
+                    date_of_birth:'',
+                    password:''
+                }
+                let result = await userMongo.addUser(newUser)
+                return done(null, result)
+            }
+
+            return done(null,user)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }))
+
+    passport.serializeUser((user, done)=>{
+        done(null, user._id)
+    })
+
+    passport.deserializeUser(async (id, done)=>{
+        let user = await userMongo.validateUser({_id:id})
+        done(null, user)
+    })
+
 }

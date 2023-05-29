@@ -17,13 +17,11 @@ const userSchema = new Schema({
        required: true,
     },
     date_of_birth: {
-       type: String, 
-       required: true,
+       type: String,
     },
     password: {
         type: String,
         unique: true,
-        required: true
     },
 
 })

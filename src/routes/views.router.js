@@ -54,11 +54,12 @@ router.get('/products', auth,async(req,res)=>{
         const products = await productsMongo.getProducts(limit, sort,status, category, query, page)
         const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = products;
 
-        const userData = await userMongo.validateUser({_id: req.session.passport.user})
+        //const userData = await userMongo.validateUser({_id: req.session.passport.user})
 
         res.render('products',{
             status: 'success',
             payload: docs,
+            userData:req.session.passport.user,
             hasPrevPage,
             hasNextPage,
             prevPage,
@@ -66,9 +67,6 @@ router.get('/products', auth,async(req,res)=>{
             totalPages,
             prevLink: hasPrevPage ? `/views/products?page=${prevPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`:null,
             nextLink: hasNextPage ? `/views/products?page=${nextPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`: null,
-            first_name: userData.first_name,
-            last_name: userData.last_name,
-            email: userData.email,
         })
         
     } catch (error) {

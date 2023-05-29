@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import FileStore from 'session-file-store'
 import session from 'express-session';
 import pkg from 'connect-mongo';
-import { initPassport } from './configServer/passport.config.js';
+import { initPassport, initPassportGitHub } from './configServer/passport.config.js';
 import passport from 'passport';
 
 const {create} = pkg;
@@ -40,6 +40,7 @@ app.use(session({
 }))
 
 initPassport()
+initPassportGitHub()
 passport.use(passport.initialize())
 passport.use(passport.session())
 
@@ -47,7 +48,6 @@ passport.use(passport.session())
 app.engine('handlebars', handlebars.engine())
 app.set('views', `${__dirname}/views`)
 app.set('view engine', 'handlebars')
-
 
 app.use(routerServer)
 

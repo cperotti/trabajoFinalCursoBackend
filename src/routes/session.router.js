@@ -3,17 +3,21 @@ import passport from "passport";
 
 const router = Router();
 
-router.post('/login', passport.authenticate('login', {successRedirect:'/views/products', failureRedirect:'/api/session/faillogin'}), async(req, res)=> {
+router.post('/login', passport.authenticate('login', {failureRedirect:'/api/session/faillogin'}), async(req, res)=> {
     try {
         if (!req.user) return res.status(401).send({status: 'error', message: 'Datos incorrectos'})
-        console.log('session',req.session, req.user)
-        req.session.passport.user= {
+
+        req.session.passport.user = {
+            id:req.session.passport.user,
             first_name: req.user.first_name,
             last_name: req.user.last_name,
             email: req.user.email,
             role: req.user.email === 'adminCoder@coder.com'? "admin":'user',
         }
-        res.status(200).send({status: 'success', message: 'Usuario registrado', session: req.session.passport.user})
+
+        res.redirect('/views/products')
+        
+        //res.status(200).send({status: 'success', message: 'Usuario registrado'})
 
         /*const {email,password} = req.body
     
@@ -51,7 +55,6 @@ router.post('/login', passport.authenticate('login', {successRedirect:'/views/pr
 })
 
 router.get('/faillogin', async (req,res)=>{
-    console.log('Falló la estrategia')
     res.send({status: 'error', error: 'falló autenticación'})
 })
 
@@ -94,8 +97,14 @@ router.post('/register',passport.authenticate('register', {successRedirect:'/vie
 })
 
 router.get('/failregister', async (req,res)=>{
-    console.log('Falló la estrategia')
     res.send({status: 'error', error: 'falló autenticación'})
+})
+
+router.get('/github', passport.authenticate('github', {scope: ['user:email']}),()=>{})
+
+router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/views/login'}),(req,res)=> {
+    req.session.user = req.user
+    res.redirect('/views/products')
 })
 
 router.get('/logout', (req, res)=>{
