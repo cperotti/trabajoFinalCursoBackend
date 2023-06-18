@@ -3,6 +3,8 @@ import local from 'passport-local'
 import UserManagerMongo from '../dao/mongo/user.mongo.js'
 import { createHash, isValidPassword } from '../utils.js';
 import GithubStrategy from 'passport-github2'
+import dotEnv from 'dotenv';
+dotEnv.config()
 
 const userMongo  =  new UserManagerMongo();
 
@@ -13,7 +15,7 @@ export const initPassport = () => {
         passReqToCallback: true,
         usernameField: 'email'
     }, async (req, username, password, done)=>{
-        const {first_name, last_name} = req.body
+        const {first_name, last_name, role} = req.body
         try {
             let user = await userMongo.validateUser({email: username})
             if (user) return done(null, false)
@@ -22,6 +24,7 @@ export const initPassport = () => {
                 first_name,
                 last_name,
                 email: username,
+                role,
                 password: createHash(password)
             }
 
@@ -61,9 +64,9 @@ export const initPassport = () => {
 
 export const initPassportGitHub = () => {
     passport.use('github', new GithubStrategy({
-        clientID:'Iv1.fa670e9d18217e2f',
-        clientSecret:'c4a5a9d7a1f87ee37e5b4c8ac6a894fbea77946e',
-        callbackURL:'http://localhost:8080/api/session/githubcallback'
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret:process.env.GITHUB_CLIENT_SECRET,
+        callbackURL:process.env.GITHUB_CALLBACK_URL
     }, async(accessToken, refreshToken, profile, done)=>{
         try {
             let user = await userMongo.validateUser({email: profile._json.email})

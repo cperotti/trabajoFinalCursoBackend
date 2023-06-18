@@ -1,7 +1,12 @@
 import {connect} from "mongoose";
-let url = 'mongodb+srv://cperotti:cpm.db@cluster0.gqgbmdf.mongodb.net/ecommerce?retryWrites=true&w=majority'
+import dotEnv from 'dotenv';
+dotEnv.config()
+
+let url = process.env.MONGO_URL_SERVER
 
 export const configServer = {
+    port: process.env.PORT,
+    jwt_secret_key: process.env.JWT_SECRET_KEY,
     connectDB:()=>{
         connect(url)
         console.log('Base de datos conectada')

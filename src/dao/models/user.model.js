@@ -17,12 +17,19 @@ const userSchema = new Schema({
        required: true,
     },
     date_of_birth: {
-       type: String,
+       type: Date,
     },
     password: {
         type: String,
         unique: true,
     },
+    cartId: {
+        type:Schema.Types.ObjectId,
+        ref: 'carts'
+    },
+    role: {
+        type: String
+    }
 
 })
 

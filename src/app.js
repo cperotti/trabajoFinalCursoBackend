@@ -9,6 +9,8 @@ import session from 'express-session';
 import pkg from 'connect-mongo';
 import { initPassport, initPassportGitHub } from './configServer/passport.config.js';
 import passport from 'passport';
+import dotEnv from 'dotenv';
+dotEnv.config()
 
 const {create} = pkg;
 
@@ -27,7 +29,7 @@ const fileStore = FileStore(session);
 
 app.use(session({
     store: create({
-        mongoUrl:'mongodb+srv://cperotti:cpm.db@cluster0.gqgbmdf.mongodb.net/ecommerce?retryWrites=true&w=majority',
+        mongoUrl: process.env.MONGO_URL_SERVER,
         mongoOptions:{
             useNewUrlParser: true,
             useUnifiedTopology: true,
@@ -51,4 +53,6 @@ app.set('view engine', 'handlebars')
 
 app.use(routerServer)
 
-app.listen(8080, ()=> console.log('servidor arriba'));
+const PORT = process.env.PORT
+
+app.listen(PORT, ()=> console.log('servidor arriba'));

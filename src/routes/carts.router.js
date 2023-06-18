@@ -1,111 +1,23 @@
 import { Router } from "express";
-import CartManagerMongo from "../dao/mongo/cart.mongo.js";
+import CartsController from "../controllers/carts.controllers.js";
 
-const cartMongo = new CartManagerMongo()
+const cartsController = new CartsController();
 
 const router = Router()
 
-router.post('/', async(req, res)=>{
-    try {
-        const newCart = {products: []}
-        let response = await cartMongo.addCart(newCart)
-        res.send({
-            status: 'success',
-            payload: response,
-        })
-    } catch (error) {
-        console.log(error)
-    }
-})
+router.post('/', cartsController.createCart)
 
-router.get('/:cid', async(req, res)=>{
-    try {
-        let {cid} = req.params;
-        let response = await cartMongo.getCartById(cid)
+router.get('/:cid', cartsController.getCart)
 
-        res.send({
-            status: 'success',
-            payload:response
-        })
-    } catch (error) {
-        console.log(error)
-    }
-    
-})
+router.post('/:cid/product/:pid', cartsController.addProductToCart)
 
-router.post('/:cid/product/:pid', async(req, res)=>{
-    try {
-        let {cid, pid} = req.params;
-        let dataProduct = req.body;
-    
-        let response = await cartMongo.addProductToCart(cid, pid, dataProduct)
-        res.send({
-            status: 'success',
-            payload: response,
-        })
-    } catch (error) {
-        console.log(error)
-    }
-})
+router.delete('/:cid/product/:pid', cartsController.deleteProductToCart)
 
-router.delete('/:cid/product/:pid', async(req, res)=>{
-    try {
-        let {cid, pid} = req.params;
-    
-        let response = await cartMongo.deleteProductToCart(cid, pid)
-        res.send({
-            status: 'success',
-            payload: response,
-        })
-    } catch (error) {
-        console.log(error)
-    }
-})
+router.put('/:cid', cartsController.updateCart)
 
-router.put('/:cid', async(req, res)=>{
-    try {
-        let {cid} = req.params;
-        let dataCart = req.body
+router.put('/:cid/product/:pid', cartsController.updateProductToCart)
 
-        let response = await cartMongo.updateCart(cid, dataCart)
-        res.send({
-            status: 'success',
-            payload:response
-        })
-    } catch (error) {
-        console.log(error)
-    }
-    
-})
-
-router.put('/:cid/product/:pid', async(req, res)=>{
-    try {
-        let {cid, pid} = req.params;
-        let dataProduct = req.body
-    
-        let response = await cartMongo.updateCartProduct(cid, pid, dataProduct)
-        res.send({
-            status: 'success',
-            payload: response,
-        })
-    } catch (error) {
-        console.log(error)
-    }
-})
-
-router.delete('/:cid', async(req, res)=>{
-    try {
-        let {cid} = req.params;
-        let response = await cartMongo.deleteAllProducts(cid)
-        res.send({
-            status: 'success',
-            payload:response
-        })
-    } catch (error) {
-        console.log(error)
-    }
-    
-})
+router.delete('/:cid', cartsController.deleteAllProductsToCart)
 
 
 export default router;
