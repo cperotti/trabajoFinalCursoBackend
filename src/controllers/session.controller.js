@@ -1,37 +1,26 @@
 import { generateToken } from "../utils/generateTokenJwt.js"
+import { userService } from "../service/user.service.js"
+import { createHash } from "../utils.js"
 
 class SessionController {
     loginUser = async(req, res)=> {
         try {
-            console.log(req.body)
-            const user = {
-                first_name: 'Fede',
-                last_name: 'Osandón', 
-                role: 'user',
-                email: 'f@gmail.com'
+            const user = await userService.validateUser({email: req.body.email})
+
+            const dataUser={
+                first_name: user.first_name,
+                last_name: user.last_name,
+                email: user.email,
+                role: user.role
             }
     
-            const token = generateToken(user)
+            const token = generateToken(dataUser)
         
-            res.cookie('coderCookieToken', token, {
+            res.cookie('cookieUser', token, {
                 maxAge: 60*60*10000,
                 httpOnly: true
             })
-            // .send({
-            //     status: 'success',
-            //     token
-            // })
 
-            // if (!req.user) return res.status(401).send({status: 'error', message: 'Datos incorrectos'})
-    
-            //     req.session.passport.user = {
-            //         _id:req.session.passport.user,
-            //         first_name: req.user.first_name,
-            //         last_name: req.user.last_name,
-            //         email: req.user.email,
-            //         role: req.user.role,
-            //     }
-    
             res.redirect('/views/products')
             
         } catch (error) {
@@ -45,13 +34,21 @@ class SessionController {
 
     registerUser = async(req,res)=>{
         try {
-            const token = generateToken(req.body)
-        res.send({
-            status: 'success',
-            token
-        })
+            let user = await userService.validateUser({email: req.body.email})
+            if (user) return res.send({status:'error', error:'Ya existe usuario registrado con etos datos'})
 
-            // res.status(200).send({status: 'success', message: 'Usuario registrado'})
+            let newUser = {
+                first_name: req.body.first_name,
+                last_name: req.body.last_name,
+                email: req.body.email,
+                date_of_birth: req.body.date_of_birth,
+                role:req.body.role,
+                password: createHash(req.body.password)
+            }
+
+            await userService.addUser(newUser)
+
+            res.redirect('/views/login')
         
         } catch (error) {
             console.log(error)
@@ -78,7 +75,7 @@ class SessionController {
             if (err) {
                 return res.send({status: 'error', error: err})
             }
-            res.clearCookie('coderCookieToken')
+            res.clearCookie('cookieUser')
             res.redirect("/views/login")
         })
     }

@@ -67,10 +67,9 @@ const JWTStrategy = passportJWT.Strategy
 const ExtractJWT = passportJWT.ExtractJwt
 
 let cookieExtractor = (req) => {
-    console.log(req)
     let token = null
     if (req && req.cookies) {
-        token = req.cookies['coderCookieToken']
+        token = req.cookies['cookieUser']
     }
     return token
 }

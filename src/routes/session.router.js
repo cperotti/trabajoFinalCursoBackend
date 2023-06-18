@@ -12,7 +12,7 @@ router.post('/login', /*passport.authenticate('login', {failureRedirect:'/api/se
 
 router.get('/faillogin', sessionController.failLogin)
 
-router.post('/register', passportAuth('jwt'), authorizaton('user')/*passport.authenticate('register', {successRedirect:'/views/login', failureRedirect: '/api/session/failregister'})*/, sessionController.registerUser)
+router.post('/register', /*passport.authenticate('register', {successRedirect:'/views/login', failureRedirect: '/api/session/failregister'})*/ sessionController.registerUser)
 
 router.get('/failregister', sessionController.failRegister)
 
