@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import FileStore from 'session-file-store'
 import session from 'express-session';
 import pkg from 'connect-mongo';
-import { initPassport, initPassportGitHub } from './configServer/passport.config.js';
+import { initPassport,initializePassport, initPassportGitHub } from './configServer/passport.config.js';
 import passport from 'passport';
 import dotEnv from 'dotenv';
 dotEnv.config()
@@ -41,7 +41,8 @@ app.use(session({
     saveUninitialized: false
 }))
 
-initPassport()
+// initPassport()
+initializePassport()
 initPassportGitHub()
 passport.use(passport.initialize())
 passport.use(passport.session())

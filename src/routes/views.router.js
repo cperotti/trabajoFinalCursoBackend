@@ -3,7 +3,9 @@ import MessageManagerMongo from '../dao/mongo/message.mongo.js';
 import ProductManagerMongo from "../dao/mongo/product.mongo.js";
 import CartManagerMongo from '../dao/mongo/cart.mongo.js';
 import UserManagerMongo from '../dao/mongo/user.mongo.js';
-import { auth } from "../middlewares/autentication.moddleware.js";
+// import { auth } from "../middlewares/autentication.moddleware.js";
+import { passportAuth } from '../middlewares/passportAuth.middleware.js';
+import { authorizaton } from '../middlewares/passportAuthorization.middleware.js';
 
 const productsMongo = new ProductManagerMongo()
 
@@ -48,7 +50,7 @@ router.post('/messages', async(req, res)=>{
     }
 })
 
-router.get('/products', auth,async(req,res)=>{
+router.get('/products', passportAuth('jwt'), authorizaton('user'),async(req,res)=>{
     try {
         let {limit, sort, status, category, query,page} = req.query
         const products = await productsMongo.getProducts(limit, sort,status, category, query, page)
@@ -72,7 +74,7 @@ router.get('/products', auth,async(req,res)=>{
     }
 })
 
-router.get('/carts/:cid', auth, async(req, res)=>{
+router.get('/carts/:cid', passportAuth('jwt'), authorizaton('user'), async(req, res)=>{
     try {
         let {cid} = req.params;
         let response = await cartMongo.getCartById(cid)

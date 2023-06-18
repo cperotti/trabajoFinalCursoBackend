@@ -3,6 +3,7 @@ import local from 'passport-local'
 import UserManagerMongo from '../dao/mongo/user.mongo.js'
 import { createHash, isValidPassword } from '../utils.js';
 import GithubStrategy from 'passport-github2'
+import passportJWT from 'passport-jwt';
 import dotEnv from 'dotenv';
 dotEnv.config()
 
@@ -61,6 +62,36 @@ export const initPassport = () => {
         }
     }))
 }
+
+const JWTStrategy = passportJWT.Strategy
+const ExtractJWT = passportJWT.ExtractJwt
+
+let cookieExtractor = (req) => {
+    console.log(req)
+    let token = null
+    if (req && req.cookies) {
+        token = req.cookies['coderCookieToken']
+    }
+    return token
+}
+
+export const initializePassport = () =>{
+
+    passport.use('jwt', new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: process.env.JWT_SECRET_KEY
+    }, async (jwt_payload, done)=>{
+        try {
+            done(null, jwt_payload)
+        } catch (error) {
+            return done(error)
+        }
+    }))
+
+    // passport.serializeUser()
+    // passport.deserializeUser()
+}
+
 
 export const initPassportGitHub = () => {
     passport.use('github', new GithubStrategy({
