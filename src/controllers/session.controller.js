@@ -1,6 +1,7 @@
 import { generateToken } from "../utils/generateTokenJwt.js"
 import { userService } from "../service/user.service.js"
 import { createHash } from "../utils.js"
+import UserDto from "../dto/user.dto.js"
 
 class SessionController {
     loginUser = async(req, res)=> {
@@ -37,14 +38,15 @@ class SessionController {
             let user = await userService.validateUser({email: req.body.email})
             if (user) return res.send({status:'error', error:'Ya existe usuario registrado con etos datos'})
 
-            let newUser = {
+            const newUser =  new UserDto(req.body)
+           /* let newUser = {
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
                 email: req.body.email,
                 date_of_birth: req.body.date_of_birth,
                 role:req.body.role,
                 password: createHash(req.body.password)
-            }
+            }*/
 
             await userService.addUser(newUser)
 

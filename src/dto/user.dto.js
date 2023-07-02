@@ -1,3 +1,5 @@
+import { createHash } from "../utils.js"
+
 class UserDto {
     constructor(user){
         this.first_name = user.first_name,

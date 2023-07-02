@@ -1,4 +1,5 @@
 
+import CartDto from "../dto/cart.dto.js"
 import { cartService } from "../service/index.js"
 
 class CartsController {
@@ -34,7 +35,7 @@ class CartsController {
     addProductToCart = async(req, res)=>{
         try {
             let {cid, pid} = req.params;
-            let dataProduct = req.body;
+            let dataProduct = new CartDto(req.body);
         
             let response = await cartService.addProductToCart(cid, pid, dataProduct)
             res.send({

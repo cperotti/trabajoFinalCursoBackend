@@ -3,5 +3,6 @@
 export const productService = new ProductManagerMongo();*/
 
 import { ProductDao } from "../dao/factory.js";
+import ProductRepository from "../repositories/product.repository.js";
 
-export const productService = ProductDao;
+export const productService = new ProductRepository(ProductDao);

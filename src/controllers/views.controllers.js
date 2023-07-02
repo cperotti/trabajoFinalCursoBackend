@@ -1,3 +1,4 @@
+import MessageDto from "../dto/message.dto.js";
 import { messageService, productService, cartService } from "../service/index.js";
 
 class ViewsController {
@@ -17,7 +18,7 @@ class ViewsController {
 
     createMessage = async(req, res)=>{
         try{
-            const message= req.body;
+            const message= new MessageDto(req.body);
             await messageMongo.addMessage(message)
     
             const messages = await messageService.getMessages()
