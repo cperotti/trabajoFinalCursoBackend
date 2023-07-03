@@ -1,5 +1,4 @@
 
-import CartDto from "../dto/cart.dto.js"
 import { cartService } from "../service/index.js"
 
 class CartsController {
@@ -7,7 +6,7 @@ class CartsController {
     createCart = async(req, res)=>{
         try {
             const newCart = {products: []}
-            let response = await cartService.addCart(newCart)
+            let response = await cartService.createCart(newCart)
             res.send({
                 status: 'success',
                 payload: response,
@@ -20,7 +19,7 @@ class CartsController {
     getCart = async(req, res)=>{
         try {
             let {cid} = req.params;
-            let response = await cartService.getCartById(cid)
+            let response = await cartService.getCart(cid)
     
             res.send({
                 status: 'success',
@@ -35,7 +34,7 @@ class CartsController {
     addProductToCart = async(req, res)=>{
         try {
             let {cid, pid} = req.params;
-            let dataProduct = new CartDto(req.body);
+            let dataProduct = req.body;
         
             let response = await cartService.addProductToCart(cid, pid, dataProduct)
             res.send({
@@ -82,7 +81,7 @@ class CartsController {
             let {cid, pid} = req.params;
             let dataProduct = req.body
         
-            let response = await cartService.updateCartProduct(cid, pid, dataProduct)
+            let response = await cartService.updateProductToCart(cid, pid, dataProduct)
             res.send({
                 status: 'success',
                 payload: response,
@@ -95,7 +94,7 @@ class CartsController {
     deleteAllProductsToCart = async(req, res)=>{
         try {
             let {cid} = req.params;
-            let response = await cartService.deleteAllProducts(cid)
+            let response = await cartService.deleteAllProductsToCart(cid)
             res.send({
                 status: 'success',
                 payload:response

@@ -1,5 +1,7 @@
 import { Router } from "express";
 import CartsController from "../controllers/carts.controllers.js";
+import { authorizaton } from "../middlewares/passportAuthorization.middleware.js";
+import { passportAuth } from "../middlewares/passportAuth.middleware.js";
 
 const cartsController = new CartsController();
 
@@ -9,7 +11,7 @@ router.post('/', cartsController.createCart)
 
 router.get('/:cid', cartsController.getCart)
 
-router.post('/:cid/product/:pid', cartsController.addProductToCart)
+router.post('/:cid/product/:pid', passportAuth('jwt'),authorizaton('user'), cartsController.addProductToCart)
 
 router.delete('/:cid/product/:pid', cartsController.deleteProductToCart)
 

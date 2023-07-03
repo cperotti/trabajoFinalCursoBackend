@@ -1,5 +1,5 @@
 class CartDto {
-    constructor(cart){ //reveer si esta bien
+    constructor(cart){
         this.quantity = cart.stock
     }
 }
