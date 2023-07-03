@@ -104,6 +104,15 @@ class CartManagerMongo {
             return new Error(error)
         }
     }
+
+    finalizePurchase = async(cid, data)=>{
+        try {
+            const findCart = await cartModel.findOne({_id: cid}).lean()
+
+        } catch (error) {
+            return new Error(error)
+        }
+    }
 }
 
 export default CartManagerMongo;

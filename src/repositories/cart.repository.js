@@ -40,6 +40,11 @@ class CartRepository{
         let result = await this.dao.deleteAllProductsToCart(cid);
         return result
     }
+
+    finalizePurchase = async(cid,data)=>{
+        let result = await this.dao.finalizePurchase(cid, data);
+        return result
+    }
 }
 
 export default CartRepository;

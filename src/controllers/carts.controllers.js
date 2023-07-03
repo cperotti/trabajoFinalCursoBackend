@@ -104,6 +104,23 @@ class CartsController {
         }
         
     }
+
+    finalizePurchase = async(req, res)=>{
+        try {
+
+            let {cid} = req.params;
+            let {data} = req.body;
+            let response = await cartService.finalizePurchase(cid, data)
+
+            res.send({
+                status: 'success',
+                payload:response
+            })
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
 export default CartsController;
