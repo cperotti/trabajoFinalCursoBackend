@@ -34,9 +34,8 @@ class CartsController {
     addProductToCart = async(req, res)=>{
         try {
             let {cid, pid} = req.params;
-            let dataProduct = req.body;
         
-            let response = await cartService.addProductToCart(cid, pid, dataProduct)
+            let response = await cartService.addProductToCart(cid, pid)
             res.send({
                 status: 'success',
                 payload: response,
@@ -79,9 +78,9 @@ class CartsController {
     updateProductToCart = async(req, res)=>{
         try {
             let {cid, pid} = req.params;
-            let dataProduct = req.body
+            let dataUpdate = req.body
         
-            let response = await cartService.updateProductToCart(cid, pid, dataProduct)
+            let response = await cartService.updateProductToCart(cid, pid, dataUpdate)
             res.send({
                 status: 'success',
                 payload: response,
@@ -109,7 +108,6 @@ class CartsController {
         try {
 
             let {cid} = req.params;
-            //let {data} = req.body;
             let dataUser = req.user
             let response = await cartService.finalizePurchase(cid, dataUser)
 

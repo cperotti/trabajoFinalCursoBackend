@@ -10,7 +10,7 @@ class ProductRepository{
         return result
     }
     getProduct = async(pid)=>{
-        let result = await this.dao.getProduct(pid);
+        let result = await this.dao.getProductById(pid);
         return result
     }
     createProduct = async(newProduct)=>{

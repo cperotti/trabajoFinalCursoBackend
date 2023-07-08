@@ -15,9 +15,8 @@ class CartRepository{
         return result
     }
 
-    addProductToCart = async(cid, pid, dataProduct)=>{
-        let dataNewProductToCart =  new CartDto(dataProduct)
-        let result = await this.dao.addProductToCart(cid,pid,dataNewProductToCart);
+    addProductToCart = async(cid, pid)=>{
+        let result = await this.dao.addProductToCart(cid,pid);
         return result
     }
 
@@ -31,13 +30,13 @@ class CartRepository{
         return result
     }
 
-    updateProductToCart = async(cid, pid, dataProduct)=>{
-        let result = await this.dao.updateProductToCart(cid,pid.dataProduct);
+    updateProductToCart = async(cid, pid, dataUpdate)=>{
+        let result = await this.dao.updateCartProduct(cid,pid,dataUpdate);
         return result
     }
 
     deleteAllProductsToCart = async(cid)=>{
-        let result = await this.dao.deleteAllProductsToCart(cid);
+        let result = await this.dao.deleteAllProducts(cid);
         return result
     }
 

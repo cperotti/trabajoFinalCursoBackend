@@ -1,7 +1,7 @@
 import { cartModel } from "./models/cart.model.js"
 import { productModel } from "./models/product.model.js"
 import { ticketModel } from "./models/ticket.model.js"
-import { userModel } from "./models/user.model.js"
+import {v4 as uuidv4} from "uuid"
 
 class CartManagerMongo {
     addCart = async(newCart)=>{
@@ -25,15 +25,15 @@ class CartManagerMongo {
             return new Error(error)
         }
     }
-    addProductToCart = async(cid, pid, dataProduct)=>{
+    addProductToCart = async(cid, pid)=>{
         try {
             const findCart = await cartModel.find({_id: cid})
             const hasProduct = findCart[0].products.find(el => el.product.toString() === pid)
             if(findCart.length > 0){
                 if(hasProduct){
-                    return await cartModel.updateOne({_id: cid, "products.product": pid}, {$inc: {"products.$.quantity": dataProduct.stock}})
+                    return await cartModel.updateOne({_id: cid, "products.product": pid}, {$inc: {"products.$.quantity": 1}})
                 }else{
-                    return await cartModel.updateOne({_id: cid}, {$push:{products:{product: pid, quantity: dataProduct.stock}}})
+                    return await cartModel.updateOne({_id: cid}, {$push:{products:{product: pid, quantity: 1}}})
                 }
             }else{
                 return 'No exite un carrito con ese id'
@@ -75,13 +75,13 @@ class CartManagerMongo {
         }
     }
 
-    updateCartProduct = async(cid, pid, dataProduct)=>{
+    updateCartProduct = async(cid, pid, dataUpdate)=>{
         try {
             const findCart = await cartModel.find({_id: cid})
             const hasProduct = findCart[0].products.find(el => el.product.toString() === pid)
             if(findCart.length > 0){
                 if(hasProduct){
-                    return await cartModel.updateOne({_id: cid, "products.product": pid}, {$set: {"products.$.quantity": dataProduct.stock}})
+                    return await cartModel.updateOne({_id: cid, "products.product": pid}, {$set: {"products.$.quantity": dataUpdate.quantity}})
                 }else{
                     return 'no encontramos un producto con ese id en el carrito'
                 }
@@ -112,26 +112,36 @@ class CartManagerMongo {
         try {
             const cartById = await cartModel.findOne({_id: cid}).lean()
             const noComprado = []
-            const comprado = []
 
-            cartById.products.map(dataCart=>{
+            cartById.products.map(async (dataCart)=>{
                 const product = dataCart.product
                 const quantity = dataCart.quantity
                 const stock = dataCart.product.stock
 
                 if(quantity <= stock){
-                    comprado.push(product.id)
                     dataCart.product.stock -= quantity
-                    const productBD = productModel.updateOne({_id: product.id}, dataCart.product)
+                    await productModel.updateOne({_id: product._id}, dataCart.product)
                 }else{
-                    noComprado.push(product.id)
+                    noComprado.push(product._id)
                 }
             })
 
-            const ticket = await ticketModel.create({
-                code: 'agregar code',
-                amount: 0,
-                purchaser: dataUser.id
+            const amount = cartById.products.filter((prod)=> !noComprado.includes(prod._id)).reduce((suma, data)=>{
+                return suma += data.product.price * data.quantity
+            },0)
+
+            if(noComprado.length > 0){
+                const keepProducts = cartById.products.filter((prod)=> noComprado.includes(prod._id))
+                await updateCart(cid, keepProducts)
+
+            }else{
+                await cartModel.deleteOne({_id: cid})
+            }
+
+            return await ticketModel.create({
+                code: uuidv4(),
+                amount,
+                purchaser: dataUser.email
             })
 
         } catch (error) {

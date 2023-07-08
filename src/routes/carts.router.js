@@ -21,7 +21,7 @@ router.put('/:cid/product/:pid', cartsController.updateProductToCart)
 
 router.delete('/:cid', cartsController.deleteAllProductsToCart)
 
-router.post('/:cid/purchase', cartsController.finalizePurchase)
+router.post('/:cid/purchase', passportAuth('jwt'),authorizaton('user'), cartsController.finalizePurchase)
 
 
 export default router;

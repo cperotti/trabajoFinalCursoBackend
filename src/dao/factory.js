@@ -5,11 +5,13 @@ import UserManagerMongo from "./mongo/user.mongo.js";
 import MessageManagerMongo from "./mongo/message.mongo.js";
 import ProductManager from './fileSystem/ProductManager.js'
 import CartsManager from "./fileSystem/CartManager.js";
+import TicketManagerMongo from "./mongo/ticket.mongo.js";
 
 let UserDao
 let ProductDao
 let CartDao
 let MessageDao
+let TicketDao
 
 switch (configServer.persistence){
     case 'MONGO':
@@ -18,12 +20,14 @@ switch (configServer.persistence){
         const userMongo = new UserManagerMongo();
         const productMongo = new ProductManagerMongo();
         const cartMongo = new CartManagerMongo();
-        const messageMongo = new MessageManagerMongo()
+        const messageMongo = new MessageManagerMongo();
+        const ticketMongo = new TicketManagerMongo();
 
         UserDao = userMongo
         ProductDao = productMongo
         CartDao = cartMongo
         MessageDao = messageMongo
+        TicketDao = ticketMongo
 
         break;
     case 'FILE':
@@ -42,4 +46,4 @@ switch (configServer.persistence){
         break;
 }
 
-export {UserDao, ProductDao, CartDao, MessageDao}
+export {UserDao, ProductDao, CartDao, MessageDao, TicketDao}
