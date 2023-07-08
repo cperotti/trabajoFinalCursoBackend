@@ -109,8 +109,9 @@ class CartsController {
         try {
 
             let {cid} = req.params;
-            let {data} = req.body;
-            let response = await cartService.finalizePurchase(cid, data)
+            //let {data} = req.body;
+            let dataUser = req.user
+            let response = await cartService.finalizePurchase(cid, dataUser)
 
             res.send({
                 status: 'success',

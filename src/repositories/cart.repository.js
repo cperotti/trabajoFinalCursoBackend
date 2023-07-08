@@ -41,8 +41,8 @@ class CartRepository{
         return result
     }
 
-    finalizePurchase = async(cid,data)=>{
-        let result = await this.dao.finalizePurchase(cid, data);
+    finalizePurchase = async(cid,dataUser)=>{
+        let result = await this.dao.finalizePurchase(cid, dataUser);
         return result
     }
 }

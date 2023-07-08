@@ -1,4 +1,7 @@
 import { cartModel } from "./models/cart.model.js"
+import { productModel } from "./models/product.model.js"
+import { ticketModel } from "./models/ticket.model.js"
+import { userModel } from "./models/user.model.js"
 
 class CartManagerMongo {
     addCart = async(newCart)=>{
@@ -105,9 +108,31 @@ class CartManagerMongo {
         }
     }
 
-    finalizePurchase = async(cid, data)=>{
+    finalizePurchase = async(cid, dataUser)=>{
         try {
-            const findCart = await cartModel.findOne({_id: cid}).lean()
+            const cartById = await cartModel.findOne({_id: cid}).lean()
+            const noComprado = []
+            const comprado = []
+
+            cartById.products.map(dataCart=>{
+                const product = dataCart.product
+                const quantity = dataCart.quantity
+                const stock = dataCart.product.stock
+
+                if(quantity <= stock){
+                    comprado.push(product.id)
+                    dataCart.product.stock -= quantity
+                    const productBD = productModel.updateOne({_id: product.id}, dataCart.product)
+                }else{
+                    noComprado.push(product.id)
+                }
+            })
+
+            const ticket = await ticketModel.create({
+                code: 'agregar code',
+                amount: 0,
+                purchaser: dataUser.id
+            })
 
         } catch (error) {
             return new Error(error)
