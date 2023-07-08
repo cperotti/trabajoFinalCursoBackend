@@ -60,7 +60,7 @@ export default class CartsManager {
         }
     }
 
-    addProductToCart = async(cartId, productId, dataProduct) =>{
+    addProductToCart = async(cartId, productId) =>{
         try{
             const cartsParse = await this.getCarts()
 
@@ -70,7 +70,7 @@ export default class CartsManager {
                     if(cart.products.length === 0){
                         return{
                             ...cart,
-                            products: [{product: productId, quantity: dataProduct.stock}]
+                            products: [{product: productId, quantity: 1}]
                         }
                     }else{
                         const productSearch = cart.products.find(prod => prod.product === productId);
@@ -82,7 +82,7 @@ export default class CartsManager {
                                     if(prod.product === productId){
                                         return{
                                             ...prod,
-                                            quantity: prod.quantity + dataProduct.stock
+                                            quantity: prod.quantity + 1
                                         }
                                     }
                                     return prod
@@ -91,7 +91,7 @@ export default class CartsManager {
                         }else{
                             return{
                                 ...cart,
-                                products: [...cart.products, {product: productId, quantity:dataProduct.stock}]
+                                products: [...cart.products, {product: productId, quantity:1}]
                             }
                         }
 

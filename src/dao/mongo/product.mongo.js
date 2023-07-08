@@ -1,4 +1,4 @@
-import { productModel } from "../models/product.model.js";
+import { productModel } from "./models/product.model.js";
 
 class ProductManagerMongo {
     getProducts = async(limit=10, sort=null,status='', category='',query,page=1)=>{

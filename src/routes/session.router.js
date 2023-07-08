@@ -3,6 +3,7 @@ import passport from "passport";
 import SessionController from "../controllers/session.controller.js";
 import { passportAuth } from "../middlewares/passportAuth.middleware.js";
 import { authorizaton } from "../middlewares/passportAuthorization.middleware.js";
+import CurrentDto from "../dto/current.dto.js";
 
 const sessionController = new SessionController()
 
@@ -24,9 +25,10 @@ router.get('/logout', sessionController.logoutUser)
 
 router.get('/current', 
         passportAuth('jwt'), 
-        authorizaton('admin'),
+        authorizaton('user'),
         (req, res)=> {
-            res.send('current')
+            const dataUser = new CurrentDto(req.user)
+            res.send(dataUser)
         })
 
 

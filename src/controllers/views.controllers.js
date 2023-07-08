@@ -18,7 +18,7 @@ class ViewsController {
     createMessage = async(req, res)=>{
         try{
             const message= req.body;
-            await messageMongo.addMessage(message)
+            await messageService.createMessage(message)
     
             const messages = await messageService.getMessages()
             let data = {
@@ -61,7 +61,7 @@ class ViewsController {
     getCartData = async(req, res)=>{
         try {
             let {cid} = req.params;
-            let response = await cartService.getCartById(cid)
+            let response = await cartService.getCart(cid)
     
             res.render('cartId',{cart:response, hasCart: response})
         } catch (error) {

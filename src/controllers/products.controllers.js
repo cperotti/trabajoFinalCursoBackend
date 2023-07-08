@@ -30,7 +30,7 @@ class ProductsController {
         try{
             let {pid} = req.params
             
-            let response = await productService.getProductById(pid)
+            let response = await productService.getProduct(pid)
             res.send({
                 status:'success',
                 payload: response,
@@ -58,7 +58,7 @@ class ProductsController {
         try{
             const newProduct = req.body;
     
-            let response = await productService.addProduct(newProduct)
+            let response = await productService.createProduct(newProduct)
                 
             res.send({
                 status:'Success',

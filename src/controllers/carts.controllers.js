@@ -6,7 +6,7 @@ class CartsController {
     createCart = async(req, res)=>{
         try {
             const newCart = {products: []}
-            let response = await cartService.addCart(newCart)
+            let response = await cartService.createCart(newCart)
             res.send({
                 status: 'success',
                 payload: response,
@@ -19,7 +19,7 @@ class CartsController {
     getCart = async(req, res)=>{
         try {
             let {cid} = req.params;
-            let response = await cartService.getCartById(cid)
+            let response = await cartService.getCart(cid)
     
             res.send({
                 status: 'success',
@@ -34,9 +34,8 @@ class CartsController {
     addProductToCart = async(req, res)=>{
         try {
             let {cid, pid} = req.params;
-            let dataProduct = req.body;
         
-            let response = await cartService.addProductToCart(cid, pid, dataProduct)
+            let response = await cartService.addProductToCart(cid, pid)
             res.send({
                 status: 'success',
                 payload: response,
@@ -79,9 +78,9 @@ class CartsController {
     updateProductToCart = async(req, res)=>{
         try {
             let {cid, pid} = req.params;
-            let dataProduct = req.body
+            let dataUpdate = req.body
         
-            let response = await cartService.updateCartProduct(cid, pid, dataProduct)
+            let response = await cartService.updateProductToCart(cid, pid, dataUpdate)
             res.send({
                 status: 'success',
                 payload: response,
@@ -94,7 +93,7 @@ class CartsController {
     deleteAllProductsToCart = async(req, res)=>{
         try {
             let {cid} = req.params;
-            let response = await cartService.deleteAllProducts(cid)
+            let response = await cartService.deleteAllProductsToCart(cid)
             res.send({
                 status: 'success',
                 payload:response
@@ -103,6 +102,23 @@ class CartsController {
             console.log(error)
         }
         
+    }
+
+    finalizePurchase = async(req, res)=>{
+        try {
+
+            let {cid} = req.params;
+            let dataUser = req.user
+            let response = await cartService.finalizePurchase(cid, dataUser)
+
+            res.send({
+                status: 'success',
+                payload:response
+            })
+            
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 
