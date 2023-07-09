@@ -10,6 +10,7 @@ import pkg from 'connect-mongo';
 import { initPassport,initializePassport, initPassportGitHub } from './configServer/passport.config.js';
 import passport from 'passport';
 import dotEnv from 'dotenv';
+import { errorHandler } from './middlewares/error.middleware.js';
 dotEnv.config()
 
 const {create} = pkg;
@@ -53,6 +54,8 @@ app.set('views', `${__dirname}/views`)
 app.set('view engine', 'handlebars')
 
 app.use(routerServer)
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 
