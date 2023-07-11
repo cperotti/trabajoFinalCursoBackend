@@ -11,6 +11,7 @@ import { initPassport,initializePassport, initPassportGitHub } from './configSer
 import passport from 'passport';
 import dotEnv from 'dotenv';
 import { errorHandler } from './middlewares/error.middleware.js';
+import { addLoggerDev, addLoggerProd } from './configServer/logger.js';
 dotEnv.config()
 
 const {create} = pkg;
@@ -25,6 +26,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static(`${__dirname}/public`))
 
 app.use(cookieParser('P@l@braS3cr3t0'))
+
+app.use(addLoggerDev)
 
 const fileStore = FileStore(session);
 
