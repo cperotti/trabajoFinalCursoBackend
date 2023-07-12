@@ -31,10 +31,6 @@ const loggerDev = winston.createLogger({
                 winston.format.simple()
             )
         }),
-        new winston.transports.File({
-            filename:'./errors.log', 
-            level:'error'
-        })
     ]
 })
 
@@ -42,11 +38,18 @@ const loggerProd = winston.createLogger({
     levels: customLevels.levels,
     transports:[
         new winston.transports.Console({
-            level: 'info'
+            level: 'info',
+            format: winston.format.combine(
+                winston.format.colorize({
+                    colors: customLevels.colors,
+                }),
+                winston.format.simple()
+            )
         }),
         new winston.transports.File({
             filename:'./errors.log', 
-            level:'error'
+            level:'error',
+            format: winston.format.simple()
         })
     ]
 })
@@ -54,14 +57,14 @@ const loggerProd = winston.createLogger({
 const addLoggerDev = (req, res, next)=>{
     console.log(req)
     req.logger = loggerDev
-    req.logger.http(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
+    req.logger.debug(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
     next()
 }
 
 const addLoggerProd = (req, res, next)=>{
     console.log(req)
     req.logger = loggerProd
-    req.logger.http(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
+    req.logger.info(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
     next()
 }
 

@@ -16,7 +16,12 @@ router.get('/mockingproducts', (req,res)=>{
 })
 
 router.get('/loggerTest',(req,res)=>{
-    req.logger.warn('alerta');
+    req.logger.warning('alerta')
+    // req.logger.error('alerta')
+    // req.logger.info('info')
+    // req.logger.fatal('fatal error')
+    // req.logger.debug('warning')
+
     res.send({messge:'prueba logger'})
 })
 
