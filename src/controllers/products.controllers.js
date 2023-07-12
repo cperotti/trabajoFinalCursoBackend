@@ -78,6 +78,7 @@ class ProductsController {
             })
     
         }catch(error){
+            req.logger.error(error)
             next(error)
             //console.log(error)
         }

@@ -12,6 +12,10 @@ import passport from 'passport';
 import dotEnv from 'dotenv';
 import { errorHandler } from './middlewares/error.middleware.js';
 import { addLoggerDev, addLoggerProd } from './configServer/logger.js';
+import { commander } from './utils/commander.js';
+
+const {mode} = commander.opts()
+
 dotEnv.config()
 
 const {create} = pkg;
@@ -27,7 +31,8 @@ app.use(express.static(`${__dirname}/public`))
 
 app.use(cookieParser('P@l@braS3cr3t0'))
 
-app.use(addLoggerDev)
+const logger = mode === 'development' ? addLoggerDev : addLoggerProd
+app.use(logger)
 
 const fileStore = FileStore(session);
 

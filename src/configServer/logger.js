@@ -11,8 +11,8 @@ const customLevels = {
     },
     colors:{
         fatal:'red',
-        error:'orange', 
-        warning:'orange',
+        error:'red', 
+        warning:'yellow',
         info:'blue',
         http:'violet', 
         debug:'white',
@@ -31,6 +31,11 @@ const loggerDev = winston.createLogger({
                 winston.format.simple()
             )
         }),
+        new winston.transports.File({
+            filename:'./errors.log', 
+            level:'error',
+            format: winston.format.simple()
+        })
     ]
 })
 
@@ -55,14 +60,12 @@ const loggerProd = winston.createLogger({
 })
 
 const addLoggerDev = (req, res, next)=>{
-    console.log(req)
     req.logger = loggerDev
     req.logger.debug(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
     next()
 }
 
 const addLoggerProd = (req, res, next)=>{
-    console.log(req)
     req.logger = loggerProd
     req.logger.info(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
     next()
