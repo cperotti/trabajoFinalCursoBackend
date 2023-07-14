@@ -1,5 +1,8 @@
 
 import { productService } from "../service/index.js";
+import { EError } from "../utils/CustomeError/EErrors.js";
+import CustomError from "../utils/CustomeError/customError.js";
+import { generatePoductErrorInfo } from "../utils/CustomeError/info.js";
 //import { uploader } from "../utils.js";
 
 class ProductsController {
@@ -54,10 +57,19 @@ class ProductsController {
 //     })
 //     .catch((error)=>console.log(error))
 // })
-    createProduct = async(req, res)=>{
+    createProduct = async(req, res, next)=>{
         try{
             const newProduct = req.body;
-    
+
+            if(!newProduct.title || !newProduct.code || !newProduct.price || !newProduct.category || !newProduct.description || !newProduct.stock || !newProduct.status){
+                CustomError.createError({
+                    name: 'Creación de producto',
+                    cause: generatePoductErrorInfo(newProduct),
+                    message: 'Error al crear un producto',
+                    code: EError.INVALID_TYPE_ERROR
+                })
+            }
+
             let response = await productService.createProduct(newProduct)
                 
             res.send({
@@ -66,7 +78,8 @@ class ProductsController {
             })
     
         }catch(error){
-            console.log(error)
+            next(error)
+            //console.log(error)
         }
     }
     
