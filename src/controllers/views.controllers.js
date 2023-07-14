@@ -11,7 +11,8 @@ class ViewsController {
             }
             res.render('chat', data)
         }catch (error){
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 
@@ -30,7 +31,8 @@ class ViewsController {
             res.render('chat', data)
          
         }catch (error){
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 
@@ -54,7 +56,8 @@ class ViewsController {
             })
             
         } catch (error) {
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 
@@ -65,7 +68,8 @@ class ViewsController {
     
             res.render('cartId',{cart:response, hasCart: response})
         } catch (error) {
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
         
     }

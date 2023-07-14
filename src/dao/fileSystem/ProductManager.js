@@ -12,7 +12,8 @@ export default class ProductManager {
             return 'Archivo creado con éxito'
         }
         catch (error){
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 
@@ -36,7 +37,8 @@ export default class ProductManager {
             }
         }
         catch (error) {
-            console.log(error);
+            req.logger.error(error)
+            //console.log(error);
         }
     }
 
@@ -47,7 +49,8 @@ export default class ProductManager {
             return productsParse
         }
         catch (error){
-            console.log(error);
+            req.logger.error(error)
+            //console.log(error);
         }
     }
 
@@ -63,7 +66,8 @@ export default class ProductManager {
             }
         }
         catch (error){
-            console.log(error);
+            req.logger.error(error)
+            //console.log(error);
         }
     }
 
@@ -88,7 +92,8 @@ export default class ProductManager {
     
         }
         catch (error) {
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 
@@ -107,7 +112,8 @@ export default class ProductManager {
 
         }
         catch (error){
-            console.log(error);
+            req.logger.error(error)
+            //console.log(error);
         }
     }
 

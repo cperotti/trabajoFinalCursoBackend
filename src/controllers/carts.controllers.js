@@ -12,7 +12,8 @@ class CartsController {
                 payload: response,
             })
         } catch (error) {
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 
@@ -26,7 +27,8 @@ class CartsController {
                 payload:response
             })
         } catch (error) {
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
         
     }
@@ -41,7 +43,8 @@ class CartsController {
                 payload: response,
             })
         } catch (error) {
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 
@@ -55,7 +58,8 @@ class CartsController {
                 payload: response,
             })
         } catch (error) {
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 
@@ -70,7 +74,8 @@ class CartsController {
                 payload:response
             })
         } catch (error) {
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
         
     }
@@ -86,7 +91,8 @@ class CartsController {
                 payload: response,
             })
         } catch (error) {
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 
@@ -99,7 +105,8 @@ class CartsController {
                 payload:response
             })
         } catch (error) {
-            console.log(error)
+            req.logger.error(error)
+           // console.log(error)
         }
         
     }
@@ -117,7 +124,8 @@ class CartsController {
             })
             
         } catch (error) {
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 }

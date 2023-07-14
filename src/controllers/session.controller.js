@@ -25,7 +25,8 @@ class SessionController {
             res.redirect('/views/products')
             
         } catch (error) {
-           console.log(error)
+            req.logger.error(error)
+           //console.log(error)
         }
     }
 
@@ -53,7 +54,8 @@ class SessionController {
             res.redirect('/views/login')
         
         } catch (error) {
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 
