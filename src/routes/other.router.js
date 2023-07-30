@@ -15,4 +15,14 @@ router.get('/mockingproducts', (req,res)=>{
 
 })
 
+router.get('/loggerTest',(req,res)=>{
+    req.logger.warning('alerta')
+    // req.logger.error('error')
+    // req.logger.info('info')
+    // req.logger.fatal('fatal error')
+    // req.logger.debug('warning')
+
+    res.send({messge:'prueba logger'})
+})
+
 export default router;

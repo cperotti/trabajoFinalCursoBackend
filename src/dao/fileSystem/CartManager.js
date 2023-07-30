@@ -12,7 +12,8 @@ export default class CartsManager {
             return 'Archivo creado con éxito'
         }
         catch (error){
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 
@@ -29,7 +30,8 @@ export default class CartsManager {
             return 'Carrito agregado exitosamente'
         }
         catch (error) {
-            console.log(error);
+            req.logger.error(error)
+            //console.log(error);
         }
     }
 
@@ -40,7 +42,8 @@ export default class CartsManager {
             return productsParse
         }
         catch (error){
-            console.log(error);
+            req.logger.error(error)
+            //console.log(error);
         }
     }
 
@@ -56,7 +59,8 @@ export default class CartsManager {
             }
         }
         catch (error){
-            console.log(error);
+            req.logger.error(error)
+            //console.log(error);
         }
     }
 
@@ -108,7 +112,8 @@ export default class CartsManager {
     
         }
         catch (error) {
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 

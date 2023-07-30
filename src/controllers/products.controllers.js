@@ -25,7 +25,8 @@ class ProductsController {
             })
     
         }catch(error){
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
     
@@ -39,7 +40,8 @@ class ProductsController {
                 payload: response,
             })
         }catch(error){
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
     
@@ -78,6 +80,7 @@ class ProductsController {
             })
     
         }catch(error){
+            req.logger.error(error)
             next(error)
             //console.log(error)
         }
@@ -94,7 +97,8 @@ class ProductsController {
                 payload: response,
             })
         }catch (error){
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
     
@@ -108,7 +112,8 @@ class ProductsController {
                 payload: response,
             })
         } catch (error) {
-            console.log(error)
+            req.logger.error(error)
+            //console.log(error)
         }
     }
 }
