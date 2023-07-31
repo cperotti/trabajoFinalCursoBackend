@@ -13,6 +13,8 @@ import dotEnv from 'dotenv';
 import { errorHandler } from './middlewares/error.middleware.js';
 import { addLoggerDev, addLoggerProd } from './configServer/logger.js';
 import { commander } from './utils/commander.js';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
 
 const {mode} = commander.opts()
 
@@ -30,6 +32,21 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static(`${__dirname}/public`))
 
 app.use(cookieParser('P@l@braS3cr3t0'))
+
+const swaggerOptions = {
+    definition:{
+        openapi:'3.0.1',
+        info:{
+            title:'Documentación de ecommerce',
+            description:'Esta es la documentación de ecommerce',
+        }
+    }, 
+    apis:[`${__dirname}/docs/**/*.yaml`]
+}
+
+const specs = swaggerJSDoc(swaggerOptions)
+
+app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 const logger = mode === 'development' ? addLoggerDev : addLoggerProd
 app.use(logger)
