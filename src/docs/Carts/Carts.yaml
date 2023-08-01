@@ -79,7 +79,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#components/requestBodies/updateCart'
+              $ref: '#components/requestBodies/updateCartByProduct'
       responses:
         "201":
           description: El producto fue agregado correctamente al carrito
@@ -122,9 +122,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#components/requestBodies/updateCart'
+              $ref: '#components/requestBodies/updateCartByProduct'
   /api/carts/:cid/purchase:
     post:
+      summary: Genera el ticket de compra en base al id del carrito
+      tags:
+        - Carritos
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El id del carrito relacionado al ticket
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateTicket'
+      responses:
+        "201":
+          description: El producto fue agregado correctamente al carrito
 components:
   schemas:
     Cart:
@@ -135,44 +154,101 @@ components:
           description: id autogenerado por Mongo
         products:
           type: array
+          items:
+            type: object
+            properties:
+              product: 
+                type: string
+                description: id del producto agregado
+              quantity: 
+                type: number
+                description: La cantidad del producto que se agregó al carrito
+            $ref: '#components/schemas/Cart'
           description: Contiene los productos agregados al carrito
-          properties:
-            product: 
-              type: string
-              description: id del producto agregado
-            quantity: 
-              type: number
-              description: La cantidad del producto que se agregó al carrito
       example:
         _id: ObjectId('xdfgcgvhbjn.assdf678nj')
         products: [
-          product: '646131ac8677b4a8eca17443',
-          quantity: 38
+          {
+            product: 646131ac8677b4a8eca17443,
+            quantity: 38
+          }
         ]
+    Ticket:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: id autogenerado por Mongo
+        code:
+          type: string
+          description: Es el codigo identificador unico de ticket
+        purchase_datetime:
+          type: date
+          description: Es la fecha en la que se crea el ticket
+        amount:
+          type: number
+          description: es el valor total de la compra
+        purchaser:
+          type: string
+          description: Email del comprador
+      example:
+        _id: ObjectId('xdfgcgvhbjn.assdf678nj')
+        code: '001'
+        purchase_datetime: '1690848073693'
+        amount: 2000
+        purchaser: cp@gmail.com
   requestBodies:
     updateCartByProduct:
       type: object
       properties:
-        products:
-          type: array
-          description: Contiene los productos agregados al carrito
-          properties:
-            product: 
-              type: string
-              description: id del producto agregado
-            quantity: 
-              type: number
-              description: La cantidad del producto que se agregó al carrito
+        product: 
+          type: string
+          description: id del producto agregado
+        quantity: 
+          type: number
+          description: La cantidad del producto que se agregó al carrito
+      example:
+        product: 646131ac8677b4a8eca17443
+        quantity: 20
     updateCart:
-      type: object
+      type: array
       properties:
         products:
           type: array
+          items:
+            type: object
+            properties:
+              product: 
+                type: string
+                description: id del producto agregado
+              quantity: 
+                type: number
+                description: La cantidad del producto que se agregó al carrito
           description: Contiene los productos agregados al carrito
-          properties:
-            product: 
-              type: string
-              description: id del producto agregado
-            quantity: 
-              type: number
-              description: La cantidad del producto que se agregó al carrito
+      example:
+        [
+          {
+            product: 646131ac8677b4a8eca17443,
+            quantity: 38
+          },
+          {
+            product: 646131e18677b4a8eca17445,
+            quantity: 54
+          }
+        ]
+    updateTicket:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Es el codigo identificador unico de ticket
+        amount:
+          type: number
+          description: es el valor total de la compra
+        purchaser:
+          type: string
+          description: Email del comprador
+      example:
+        code: '001'
+        amount: 2000
+        purchaser: cp@gmail.com
