@@ -34,6 +34,14 @@ class UserManagerMongo {
         }
     }
 
+    updateUserPremium = async(uid, dataReplace)=>{
+        try {
+            return await userModel.updateOne({_id: uid}, dataReplace)
+        } catch (error) {
+            return new Error(error)
+        }
+    }
+
 }
 
 export default UserManagerMongo;
