@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "start http://localhost:8080/views/login & nodemon src/app.js --mode development",
-    "start": "start http://localhost:8080/views/login & nodemon src/app.js --mode production"
+    "start": "start http://localhost:8080/views/login & nodemon src/app.js --mode production",
+    "test": "mocha test/Supertest.test.js"
   },
   "keywords": [],
   "author": "",
@@ -35,5 +35,10 @@
     "swagger-ui-express": "^5.0.0",
     "uuid": "^9.0.0",
     "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
   }
 }
