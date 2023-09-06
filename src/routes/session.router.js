@@ -21,7 +21,7 @@ router.get('/github', passport.authenticate('github', {scope: ['user:email']}),(
 
 router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/views/login'}),sessionController.githubCallback)
 
-router.get('/logout', sessionController.logoutUser)
+router.get('/logout', passportAuth('jwt'),sessionController.logoutUser)
 
 router.get('/current', 
         passportAuth('jwt'), 

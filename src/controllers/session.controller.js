@@ -1,7 +1,6 @@
 import { generateToken } from "../utils/generateTokenJwt.js"
 import { userService } from "../service/user.service.js"
-import { createHash } from "../utils.js"
-import UserDto from "../dto/user.dto.js"
+import SessionDto from "../dto/session.dto.js"
 
 class SessionController {
     loginUser = async(req, res)=> {
@@ -12,11 +11,14 @@ class SessionController {
                 first_name: user.first_name,
                 last_name: user.last_name,
                 email: user.email,
-                role: user.role
+                role: user.role,
+                last_connection: Date.now(),
             }
     
             const token = generateToken(dataUser)
-        
+
+            await userService.updateUser({_id:user._id},{last_connection: Date.now()})
+            
             res.cookie('cookieUser', token, {
                 maxAge: 60*60*10000,
                 httpOnly: true
@@ -26,7 +28,6 @@ class SessionController {
             
         } catch (error) {
             req.logger.error(error)
-           //console.log(error)
         }
     }
 
@@ -39,15 +40,7 @@ class SessionController {
             let user = await userService.validateUser({email: req.body.email})
             if (user) return res.send({status:'error', error:'Ya existe usuario registrado con etos datos'})
 
-            const newUser =  new UserDto(req.body)
-           /* let newUser = {
-                first_name: req.body.first_name,
-                last_name: req.body.last_name,
-                email: req.body.email,
-                date_of_birth: req.body.date_of_birth,
-                role:req.body.role,
-                password: createHash(req.body.password)
-            }*/
+            const newUser =  new SessionDto(req.body)
 
             await userService.addUser(newUser)
 
@@ -55,7 +48,6 @@ class SessionController {
         
         } catch (error) {
             req.logger.error(error)
-            //console.log(error)
         }
     }
 
@@ -74,7 +66,8 @@ class SessionController {
         res.redirect('/views/products')
     }
 
-    logoutUser = (req, res)=>{
+    logoutUser = async(req, res)=>{
+       await userService.updateUser({email:req.user.email},{last_connection: Date.now()})
         req.session.destroy(err=>{
             if (err) {
                 return res.send({status: 'error', error: err})

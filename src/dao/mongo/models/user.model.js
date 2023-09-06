@@ -29,7 +29,17 @@ const userSchema = new Schema({
     },
     role: {
         type: String
-    }
+    },
+    premiun: {
+        type: Boolean
+    },
+    documents: [{
+        name: String,
+        reference: String,
+    }],
+    last_connection: {
+        type: Date,
+    },
 
 })
 
