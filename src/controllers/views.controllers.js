@@ -1,4 +1,4 @@
-import { messageService, productService, cartService } from "../service/index.js";
+import { messageService, productService, cartService, userService } from "../service/index.js";
 
 class ViewsController {
     getMessages = async(req, res)=>{
@@ -80,6 +80,12 @@ class ViewsController {
 
     getRegisterView = (req, res)=>{
         res.render('register', {})
+    }
+
+    getUsers = async(req, res)=>{
+        let response = await userService.getUsers()
+        console.log(response)
+        res.render('users',{usersList:response, hasUsers: response})
     }
 }
 

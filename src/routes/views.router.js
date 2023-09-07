@@ -19,5 +19,7 @@ router.get('/login', viewsController.getLoginView)
 
 router.get('/register', viewsController.getRegisterView)
 
+router.get('/users', passportAuth('jwt'), authorizaton('admin'), viewsController.getUsers)
+
 
 export default router;

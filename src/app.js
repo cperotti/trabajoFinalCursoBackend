@@ -74,7 +74,12 @@ passport.use(passport.initialize())
 passport.use(passport.session())
 
 
-app.engine('handlebars', handlebars.engine())
+app.engine('handlebars', handlebars.engine({
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true
+    }
+}))
 app.set('views', `${__dirname}/views`)
 app.set('view engine', 'handlebars')
 
