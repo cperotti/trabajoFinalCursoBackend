@@ -1,3 +1,4 @@
+import { sendMail } from "../../utils/sendMail.js";
 import { userModel } from "./models/user.model.js";
 import moment from "moment";
 
@@ -54,13 +55,18 @@ class UserManagerMongo {
     deleteInactiveUsers = async()=>{
         try {
             let users = await this.getUsers();
-
+            let subject = 'Ecommerce'
+            let html = `<div>
+                <h1>Hola!, si te llegó este mail es para informate que tu cuenta fue eliminada por pasar mas de 2 dias sin actividad</h1>
+            </div>`
+        
             users.map( async(u)=>{
                 const ultimaConexion = moment(u.last_connection)
                 const fechaActual = moment(Date.now())
                 const tiempoInactividad = fechaActual.diff(ultimaConexion,'d')
 
                 if(tiempoInactividad > 2){
+                    await sendMail(u.email, subject, html)
                     return await userModel.deleteOne({_id: u._id})
                 }
             })

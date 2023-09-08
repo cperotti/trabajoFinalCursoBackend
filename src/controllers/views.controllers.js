@@ -84,7 +84,7 @@ class ViewsController {
 
     getUsers = async(req, res)=>{
         let response = await userService.getUsers()
-        console.log(response)
+        //console.log(response)
         res.render('users',{usersList:response, hasUsers: response})
     }
 }

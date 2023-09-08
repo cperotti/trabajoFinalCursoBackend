@@ -31,7 +31,8 @@ const userSchema = new Schema({
         type: String
     },
     premiun: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     documents: [{
         name: String,

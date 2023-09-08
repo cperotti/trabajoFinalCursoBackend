@@ -5,7 +5,6 @@ class UsersController {
     getUsers = async(req, res)=>{
         try {
             const response = await userService.getUsers();
-            console.log(response)
 
             const modifyResponse = response.map(user=>{
                 return new UserDto(user);

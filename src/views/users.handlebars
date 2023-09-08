@@ -1,6 +1,9 @@
 <div class="p-3">
     <h2 class="text-center m-2">Listado de usuarios</h5>
     {{#if hasUsers}}
+    <div class="d-flex justify-content-end">
+      <button type="button" class="btn btn-primary">Eliminar inactivos</button>
+    </div>
     <table class="table">
   <thead>
     <tr>
@@ -19,13 +22,38 @@
                 <td>{{this.email}}</td>
                 <td>{{this.role}}</td>
                 <td><div class="d-flex justify-content-end pe-2">
-                    <span class="pe-2">Editar</span>
-                    <span>Eliminar</span>
+                    <button type="button" class="btn btn-link pe-2" data-bs-toggle="modal" data-bs-target="modalEdit">Editar</button>
+                    <form action="/api/users/{{this._id}}" method="post">
+                      <button type="button" class="btn btn-link">Eliminar</button>
+                    </form>
                 </div></td>
             </tr>
        {{/each}}
   </tbody>
 </table>
+<div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Editar usuario</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/api/users/{{this.id}}" method="post">
+          <label for="role" class="form-label">Rol</label>
+          <select id="role" name="role" class="form-select">
+              <option value="user">Usuario</option>
+              <option value="admin">Administrador</option>
+          </select>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary">Editar</button>
+      </div>
+    </div>
+  </div>
+</div>
 {{else}}
     <p class="text-center m-4">Aún no hay productos cargados en el carrito</p>
 {{/if}}
