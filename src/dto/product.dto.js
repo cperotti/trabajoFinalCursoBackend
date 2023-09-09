@@ -8,6 +8,7 @@ class ProductDto {
         this.code= product.code,
         this.category = product.category,
         this.status= product.status ? product.status : true
+        this.createBy = product.createBy
     }
 }
 

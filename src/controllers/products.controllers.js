@@ -63,6 +63,11 @@ class ProductsController {
         try{
             const newProduct = req.body;
 
+            const auxProduct = {
+                ...newProduct,
+                createBy: req.user.id
+            }
+
             if(!newProduct.title || !newProduct.code || !newProduct.price || !newProduct.category || !newProduct.description || !newProduct.stock || !newProduct.status){
                 CustomError.createError({
                     name: 'Creación de producto',
@@ -72,7 +77,7 @@ class ProductsController {
                 })
             }
 
-            let response = await productService.createProduct(newProduct)
+            let response = await productService.createProduct(auxProduct)
                 
             res.send({
                 status:'Success',

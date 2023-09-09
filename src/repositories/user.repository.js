@@ -9,6 +9,11 @@ class UserRepository{
         return result
     }
 
+    getUserById = async(uid)=>{
+        let result = await this.dao.getUserById(uid);
+        return result
+    }
+
     validateUser = async(data)=>{
         let result = await this.dao.validateUser(data);
         return result

@@ -12,6 +12,14 @@ class UserManagerMongo {
         }
     }
 
+    getUserById = async(uid)=>{
+        try {
+            return await userModel.findOne({_id: uid})
+        } catch (error) {
+            return new Error(error)
+        }
+    }
+
     validateUser = async(data)=>{
         try {
             return await userModel.findOne(data); 

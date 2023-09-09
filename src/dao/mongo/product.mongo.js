@@ -1,4 +1,5 @@
 import { productModel } from "./models/product.model.js";
+import { userModel } from "./models/user.model.js";
 
 class ProductManagerMongo {
     getProducts = async(limit=10, sort=null,status='', category='',query,page=1)=>{
@@ -35,7 +36,21 @@ class ProductManagerMongo {
     }
     deleteProduct = async(pid)=>{
         try {
-            return await productModel.deleteOne({_id: pid})
+            const findProduct = await this.getProductById(pid)
+
+            if(findProduct){
+                const user = await userModel.findOne({_id: findProduct.createBy})
+                console.log(user)
+                if(user.premiun){
+                    let subject = 'Ecommerce'
+                    let html = `<div>
+                        <h1>Hola!, si te llegó este mail es para informate que el producto ${findProduct.title} creado por vos fue eliminado </h1>
+                    </div>`
+
+                    await sendMail(user.email, subject, html)
+                }
+            }
+           return await productModel.deleteOne({_id: pid})
         } catch (error) {
             return new Error(error)
         }
