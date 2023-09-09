@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { configServer } from '../configServer/configServer'
+import { configServer } from '../configServer/configServer.js'
 
 const transport = nodemailer.createTransport({
     service: 'gmail',
