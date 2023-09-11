@@ -40,7 +40,6 @@ class ProductManagerMongo {
 
             if(findProduct){
                 const user = await userModel.findOne({_id: findProduct.createBy})
-                console.log(user)
                 if(user.premiun){
                     let subject = 'Ecommerce'
                     let html = `<div>
