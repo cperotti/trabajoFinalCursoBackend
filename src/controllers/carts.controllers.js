@@ -1,19 +1,19 @@
 
-import { cartService } from "../service/index.js"
+import { cartService, userService } from "../service/index.js"
 
 class CartsController {
 
     createCart = async(req, res)=>{
         try {
             const newCart = {products: []}
-            let response = await cartService.createCart(newCart)
+            let response = await cartService.createCart(newCart, req.user.id)
+
             res.send({
                 status: 'success',
                 payload: response,
             })
         } catch (error) {
             req.logger.error(error)
-            //console.log(error)
         }
     }
 
@@ -28,7 +28,6 @@ class CartsController {
             })
         } catch (error) {
             req.logger.error(error)
-            //console.log(error)
         }
         
     }
@@ -36,7 +35,7 @@ class CartsController {
     addProductToCart = async(req, res)=>{
         try {
             let {cid, pid} = req.params;
-        
+
             let response = await cartService.addProductToCart(cid, pid)
             res.send({
                 status: 'success',
@@ -44,7 +43,6 @@ class CartsController {
             })
         } catch (error) {
             req.logger.error(error)
-            //console.log(error)
         }
     }
 

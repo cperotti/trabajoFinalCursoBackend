@@ -41,6 +41,10 @@ class ViewsController {
             let {limit, sort, status, category, query,page} = req.query
             const products = await productService.getProducts(limit, sort,status, category, query, page)
             const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = products;
+
+            const cartId = await userService.getUserById(req.user.id)
+
+            console.log(cartId)
     
             res.render('products',{
                 status: 'success',
@@ -53,6 +57,7 @@ class ViewsController {
                 totalPages,
                 prevLink: hasPrevPage ? `/views/products?page=${prevPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`:null,
                 nextLink: hasNextPage ? `/views/products?page=${nextPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`: null,
+                linkCarrito:`/views/carts/${cartId}`
             })
             
         } catch (error) {
@@ -64,12 +69,12 @@ class ViewsController {
     getCartData = async(req, res)=>{
         try {
             let {cid} = req.params;
-            let response = await cartService.getCart(cid)
+            let response = await cartService.getCart(cid);
     
-            res.render('cartId',{cart:response, hasCart: response})
+            res.render('cartId',{cart:response, hasCart: response.products.length >0})
+
         } catch (error) {
             req.logger.error(error)
-            //console.log(error)
         }
         
     }
