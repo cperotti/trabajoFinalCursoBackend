@@ -12,6 +12,14 @@ class UserManagerMongo {
         }
     }
 
+    getUserById = async(uid)=>{
+        try {
+            return await userModel.findOne({_id: uid})
+        } catch (error) {
+            return new Error(error)
+        }
+    }
+
     validateUser = async(data)=>{
         try {
             return await userModel.findOne(data); 
@@ -61,13 +69,15 @@ class UserManagerMongo {
             </div>`
         
             users.map( async(u)=>{
-                const ultimaConexion = moment(u.last_connection)
-                const fechaActual = moment(Date.now())
-                const tiempoInactividad = fechaActual.diff(ultimaConexion,'d')
-
-                if(tiempoInactividad > 2){
-                    await sendMail(u.email, subject, html)
-                    return await userModel.deleteOne({_id: u._id})
+                if(u.last_connection){
+                    const ultimaConexion = moment(u.last_connection)
+                    const fechaActual = moment(Date.now())
+                    const tiempoInactividad = fechaActual.diff(ultimaConexion,'d')
+    
+                    if(tiempoInactividad > 2){
+                        await sendMail(u.email, subject, html)
+                        return await userModel.deleteOne({_id: u._id})
+                    }
                 }
             })
         } catch (error) {

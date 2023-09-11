@@ -34,7 +34,9 @@ const productSchema = new Schema({
         type: Boolean,
         required: true,
     },
-
+    createBy:{
+        type: String
+    }
 })
 
 productSchema.plugin(mongoosePaginate)

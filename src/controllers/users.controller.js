@@ -20,12 +20,34 @@ class UsersController {
         }
     }
 
+    getUserById = async(req, res)=>{
+        try {
+            let {uid} = req.params;
+            const response = await userService.getUserById(uid)
+
+            res.send({
+                status:'success',
+                payload: response,
+            })
+
+        } catch (error) {
+            req.logger.error(error)
+        }
+    }
+
     updateUser = async(req, res)=>{
         try {
             let {uid} = req.params;
             let dataReplace = req.body;
+            const user = await this.getUserById(uid)
+            if(!user) return res.status(404).send({status:"error", error:"No se encontró usuario"})
             let response = await userService.updateUser({_id:uid}, dataReplace)
-            console.log(response)
+
+            res.send({
+                status:'success',
+                payload: response,
+            })
+            
         } catch (error) {
             req.logger.error(error)
         }
