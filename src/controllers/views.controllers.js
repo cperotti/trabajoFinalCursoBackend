@@ -12,7 +12,6 @@ class ViewsController {
             res.render('chat', data)
         }catch (error){
             req.logger.error(error)
-            //console.log(error)
         }
     }
 
@@ -32,7 +31,6 @@ class ViewsController {
          
         }catch (error){
             req.logger.error(error)
-            //console.log(error)
         }
     }
 
@@ -62,7 +60,6 @@ class ViewsController {
             
         } catch (error) {
             req.logger.error(error)
-            //console.log(error)
         }
     }
 
@@ -72,7 +69,6 @@ class ViewsController {
             let response = await cartService.getCart(cid);
     
             res.render('cartId',{cart:response, hasCart: response.products.length >0})
-
         } catch (error) {
             req.logger.error(error)
         }

@@ -7,9 +7,9 @@ const productsController = new ProductsController();
 
 const router = Router();
 
-router.get('/',passportAuth('jwt'), productsController.getProducts)
+router.get('/', passportAuth('jwt'), productsController.getProducts)
 
-router.get('/:pid',passportAuth('jwt'), productsController.getProduct)
+router.get('/:pid', passportAuth('jwt'), productsController.getProduct)
 
 router.post('/', passportAuth('jwt'), authorizaton('admin'), productsController.createProduct)
 

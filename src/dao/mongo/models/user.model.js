@@ -25,7 +25,7 @@ const userSchema = new Schema({
     },
     cartId: {
         type:String,
-        default:null
+        default: null
     },
     role: {
         type: String

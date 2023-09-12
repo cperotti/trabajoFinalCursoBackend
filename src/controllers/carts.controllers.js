@@ -7,7 +7,6 @@ class CartsController {
         try {
             const newCart = {products: []}
             let response = await cartService.createCart(newCart, req.user.id)
-
             res.send({
                 status: 'success',
                 payload: response,
@@ -57,7 +56,6 @@ class CartsController {
             })
         } catch (error) {
             req.logger.error(error)
-            //console.log(error)
         }
     }
 
@@ -73,7 +71,6 @@ class CartsController {
             })
         } catch (error) {
             req.logger.error(error)
-            //console.log(error)
         }
         
     }
@@ -90,7 +87,6 @@ class CartsController {
             })
         } catch (error) {
             req.logger.error(error)
-            //console.log(error)
         }
     }
 
@@ -104,7 +100,6 @@ class CartsController {
             })
         } catch (error) {
             req.logger.error(error)
-           // console.log(error)
         }
         
     }
@@ -123,7 +118,6 @@ class CartsController {
             
         } catch (error) {
             req.logger.error(error)
-            //console.log(error)
         }
     }
 }
