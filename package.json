@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "start http://localhost:8080/views/login & nodemon src/app.js --mode development",
-    "start": "start http://localhost:8080/views/login & nodemon src/app.js --mode production",
+    "start": "node src/app.js",
     "test": "mocha test/Supertest.test.js"
   },
   "keywords": [],
