@@ -1,4 +1,10 @@
 <div class="p-3">
+  <div class="d-flex justify-content-between">
+    <a href={{linkProductos}}>Volver a listado de productos</a>
+    <form action="/api/session/logout" method="get">
+      <button type="submit" class="btn btn-primary" >Cerrar sesión</button>
+    </form>
+  </div>
     <h2 class="text-center m-2">Información carrito</h5>
     {{#if hasCart}}
     <table class="table">
@@ -21,6 +27,9 @@
        {{/each}}
   </tbody>
 </table>
+<div class="d-flex justify-content-end m-5">
+  <button type="button" class="btn btn-primary">Finalizar compra</button>
+</div>
 {{else}}
     <p class="text-center m-4">Aún no hay productos cargados en el carrito</p>
 {{/if}}

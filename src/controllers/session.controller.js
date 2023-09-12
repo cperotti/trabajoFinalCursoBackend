@@ -19,7 +19,7 @@ class SessionController {
     
             const token = generateToken(dataUser)
 
-            if(!user.cartId){
+            if(!user.cartId && user.role === 'user'){
                 await cartService.createCart({products: []}, user._id)
             }
 

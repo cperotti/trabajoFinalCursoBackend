@@ -40,9 +40,7 @@ class ViewsController {
             const products = await productService.getProducts(limit, sort,status, category, query, page)
             const {docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages} = products;
 
-            const cartId = await userService.getUserById(req.user.id)
-
-            console.log(cartId)
+            const cart = await userService.getUserById(req.user.id)
     
             res.render('products',{
                 status: 'success',
@@ -55,9 +53,24 @@ class ViewsController {
                 totalPages,
                 prevLink: hasPrevPage ? `/views/products?page=${prevPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`:null,
                 nextLink: hasNextPage ? `/views/products?page=${nextPage}&limit=${limit?limit:10}${sort ?`&sort=${sort}`:''}${category ?`&category=${category}`:''}${status ?`&status=${status}`:''}`: null,
-                linkCarrito:`/views/carts/${cartId}`
+                linkCarrito:`/views/carts/${cart.cartId}`,
+                isUser: req.user.role === 'user',
             })
             
+        } catch (error) {
+            req.logger.error(error)
+        }
+    }
+
+    getProductById = async(req, res)=>{
+        try {
+            let {pid} = req.params;
+            let response = await productService.getProduct(pid)
+    
+            res.render('productId',{
+                detail:response, 
+                linkProductos: '/views/products'
+            })
         } catch (error) {
             req.logger.error(error)
         }
@@ -68,7 +81,11 @@ class ViewsController {
             let {cid} = req.params;
             let response = await cartService.getCart(cid)
     
-            res.render('cartId',{cart:response, hasCart: response.products.length >0})
+            res.render('cartId',{
+                cart:response, 
+                hasCart: response.products.length >0,
+                linkProductos: '/views/products'
+            })
         } catch (error) {
             req.logger.error(error)
         }
@@ -85,8 +102,12 @@ class ViewsController {
 
     getUsers = async(req, res)=>{
         let response = await userService.getUsers()
-        //console.log(response)
-        res.render('users',{usersList:response, hasUsers: response})
+
+        res.render('users',{
+            usersList:response, 
+            hasUsers: response,
+            linkProductos: '/views/products'
+        })
     }
 }
 
