@@ -2,11 +2,14 @@ import { cartModel } from "./models/cart.model.js"
 import { productModel } from "./models/product.model.js"
 import { ticketModel } from "./models/ticket.model.js"
 import {v4 as uuidv4} from "uuid"
+import { userModel } from "./models/user.model.js"
 
 class CartManagerMongo {
-    addCart = async(newCart)=>{
+    addCart = async(newCart, uid)=>{
         try {
-            return await cartModel.create(newCart)
+            const cart = await cartModel.create(newCart)
+            await userModel.updateOne({_id: uid}, {cartId: cart._id})
+            return cart
         } catch (error) {
             return new Error(error)
         }
@@ -136,6 +139,7 @@ class CartManagerMongo {
 
             }else{
                 await cartModel.deleteOne({_id: cid})
+                await userModel.updateOne({_id: dataUser.id}, {cartId: null})
             }
 
             return await ticketModel.create({

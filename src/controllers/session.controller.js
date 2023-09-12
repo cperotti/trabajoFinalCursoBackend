@@ -1,12 +1,13 @@
 import { generateToken } from "../utils/generateTokenJwt.js"
 import { userService } from "../service/user.service.js"
 import SessionDto from "../dto/session.dto.js"
+import { cartService } from "../service/cart.service.js"
 
 class SessionController {
     loginUser = async(req, res)=> {
         try {
             const user = await userService.validateUser({email: req.body.email})
-
+            if(user){
             const dataUser={
                 id: user._id,
                 first_name: user.first_name,
@@ -18,6 +19,10 @@ class SessionController {
     
             const token = generateToken(dataUser)
 
+            if(!user.cartId){
+                await cartService.createCart({products: []}, user._id)
+            }
+
             await userService.updateUser({_id:user._id},{last_connection: Date.now()})
             
             res.cookie('cookieUser', token, {
@@ -26,6 +31,9 @@ class SessionController {
             })
 
             res.redirect('/views/products')
+        }else{
+            res.send({status: 'error', error: 'falló autenticación'})
+        }
             
         } catch (error) {
             req.logger.error(error)

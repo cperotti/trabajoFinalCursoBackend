@@ -13,7 +13,7 @@ router.post('/messages', passportAuth('jwt'), authorizaton('user'), viewsControl
 
 router.get('/products', passportAuth('jwt'),viewsController.getProductData)
 
-router.get('/carts/:cid', passportAuth('jwt'), viewsController.getCartData)
+router.get('/carts/:cid', passportAuth('jwt'), authorizaton('user'), viewsController.getCartData)
 
 router.get('/login', viewsController.getLoginView)
 

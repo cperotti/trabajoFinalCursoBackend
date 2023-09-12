@@ -7,19 +7,19 @@ const cartsController = new CartsController();
 
 const router = Router()
 
-router.post('/', cartsController.createCart)
+router.post('/', passportAuth('jwt'), cartsController.createCart)
 
-router.get('/:cid', cartsController.getCart)
+router.get('/:cid', passportAuth('jwt'), cartsController.getCart)
 
 router.post('/:cid/product/:pid', passportAuth('jwt'),authorizaton('user'), cartsController.addProductToCart)
 
-router.delete('/:cid/product/:pid', cartsController.deleteProductToCart)
+router.delete('/:cid/product/:pid', passportAuth('jwt'), authorizaton('user'), cartsController.deleteProductToCart)
 
-router.put('/:cid', cartsController.updateCart)
+router.put('/:cid', passportAuth('jwt'), authorizaton('user'), cartsController.updateCart)
 
-router.put('/:cid/product/:pid', cartsController.updateProductToCart)
+router.put('/:cid/product/:pid', passportAuth('jwt'), authorizaton('user'), cartsController.updateProductToCart)
 
-router.delete('/:cid', cartsController.deleteAllProductsToCart)
+router.delete('/:cid', passportAuth('jwt'), authorizaton('user'), cartsController.deleteAllProductsToCart)
 
 router.post('/:cid/purchase', passportAuth('jwt'),authorizaton('user'), cartsController.finalizePurchase)
 
