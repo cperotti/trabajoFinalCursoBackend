@@ -5,8 +5,8 @@ class CartRepository{
         this.dao = dao
     }
 
-    createCart = async(newCart)=>{
-        let result = await this.dao.addCart(newCart);
+    createCart = async(newCart, uid)=>{
+        let result = await this.dao.addCart(newCart, uid);
         return result
     }
 

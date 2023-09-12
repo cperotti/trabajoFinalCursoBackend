@@ -9,16 +9,17 @@ import session from 'express-session';
 import pkg from 'connect-mongo';
 import { initPassport,initializePassport, initPassportGitHub } from './configServer/passport.config.js';
 import passport from 'passport';
-import dotEnv from 'dotenv';
+//import dotEnv from 'dotenv';
 import { errorHandler } from './middlewares/error.middleware.js';
 import { addLoggerDev, addLoggerProd } from './configServer/logger.js';
 import { commander } from './utils/commander.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
+import cors from 'cors'
 
 const {mode} = commander.opts()
 
-dotEnv.config()
+//dotEnv.config()
 
 const {create} = pkg;
 
@@ -32,6 +33,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static(`${__dirname}/public`))
 
 app.use(cookieParser('P@l@braS3cr3t0'))
+
+app.use(cors())
 
 const swaggerOptions = {
     definition:{
@@ -74,7 +77,12 @@ passport.use(passport.initialize())
 passport.use(passport.session())
 
 
-app.engine('handlebars', handlebars.engine())
+app.engine('handlebars', handlebars.engine({
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true
+    }
+}))
 app.set('views', `${__dirname}/views`)
 app.set('view engine', 'handlebars')
 
@@ -82,6 +90,6 @@ app.use(routerServer)
 
 app.use(errorHandler)
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 8080
 
 app.listen(PORT, ()=> console.log('servidor arriba'));

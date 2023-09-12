@@ -1,6 +1,9 @@
 <div>
     <div class="p-2">
         <div class="d-flex justify-content-end">
+             {{#if isUser}}
+                <a class="me-3" href={{linkCarrito}}> Ir al carrito</a>
+            {{/if}}
             <form action="/api/session/logout" method="get">
                 <button type="submit" class="btn btn-primary" >Cerrar sesión</button>
             </form>
@@ -18,7 +21,8 @@
                             <h5 class="card-title">{{this.title}}</h5>
                             <p class="card-text">{{this.description}}</p>
                             <h5>${{this.price}}</h5>
-                            <div class="d-flex justify-content-end">
+                            <div class="d-flex justify-content-between">
+                                <a href="/views/products/{{this._id}}">ver detalle</a>
                                 <Button type="button" class="btn btn-primary btn-sm">Agregar al carrito</Button>
                             </div>
                         </div>
